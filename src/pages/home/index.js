@@ -37,7 +37,7 @@ const Home = () => {
         <div className='w-[186px] h-screen'>
          <Sidebar />
         </div>
-        <div className=' w-[427px] mt-9'>
+        <div className='w-[427px] mt-9'>
         <Searchbar/>
         <Grouplist/>
         <Friendreq/>
