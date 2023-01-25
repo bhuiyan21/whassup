@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { BiDotsVerticalRounded} from 'react-icons/bi';
+import { FcSearch} from 'react-icons/fc';
 import { useDispatch, useSelector} from 'react-redux';
 import { getDatabase, ref, onValue, set,push} from "firebase/database";
 const Userlist = () => {
@@ -69,8 +70,15 @@ const Userlist = () => {
     },[])
   return (
     <div className='h-[451px] pt-5 pb-5 pl-5 shadow-md mt-11 rounded-lg relative'>
-      <h2 className='text-sm font-poppins font-semibold text-black'>User list</h2>
-      <BiDotsVerticalRounded className='absolute top-0 right-7 lef-0 text-2xl cursor-pointer text-secondary'/>
+        <div className='flex justify-between pr-8 items-center'>
+            <h2 className='text-sm font-poppins font-semibold text-black'>User list</h2>
+            <div className='flex items-center shadow-md px-2'>
+                <input type="text" placeholder="Search" className='outline-none rounded-lg text-shadow font-semibold text-lg'
+                />
+                <FcSearch className='text-2xl cursor-pointer text-secondary'/>
+            </div>
+        </div>
+     
            <div className='h-[370px] overflow-y-scroll pr-6'>
            
             {

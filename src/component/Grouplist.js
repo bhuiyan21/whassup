@@ -12,6 +12,8 @@ const Grouplist = () => {
     let [gnameErr, setGnameErr] = useState("");
     let [gtagErr, setGtagErr] = useState("");
     let [loading, setLoading] = useState(true);
+    let [joinreq, seJoinreq] = useState([]);
+    let [member, setMember] = useState([]);
     let handelShow = ()=>{
         setShow(!show)
     };
@@ -63,6 +65,30 @@ const Grouplist = () => {
             reqemail: data.email,
            });
     }
+    useEffect(()=>{
+        const groupJoinReqRef = ref(db, 'groupJoinReq/');
+        onValue(groupJoinReqRef, (snapshot) => {
+           let arr = [];
+            snapshot.forEach((item)=>{
+                if(data.uid != item.groupAdminId){
+                    arr.push(item.val().reqid + item.val().groupid)
+                }
+            });
+            seJoinreq(arr)
+        });
+    },[])
+    useEffect(()=>{
+        const groupmembersRef = ref(db, 'groupmembers/');
+        onValue(groupmembersRef, (snapshot) => {
+           let arr = [];
+            snapshot.forEach((item)=>{
+                if(data.uid != item.groupAdminId){
+                    arr.push(item.val().reqid + item.val().groupid)
+                }
+            });
+            setMember(arr)
+        });
+    },[])
   return (
     <div className='h-[347px] pt-5 pb-5 pl-5 shadow-md mt-11 rounded-lg relative'>
         <div className='flex justify-between items-center py-2'>
@@ -108,7 +134,7 @@ const Grouplist = () => {
                      :grouplist.map((item)=>(
                         data.uid == item.groupAdminId
                         ?
-                        <div className='flex py-4 border-b-2'>
+                        <div className='flex items-center py-4 border-b-2'>
                         <div className='mr-4 w-[70px] h-[70px]'>
                             <img src='./images/group-one.png'/>
                             </div>
@@ -121,7 +147,7 @@ const Grouplist = () => {
                              <p className='font-poppins font-medium text-xs text-shadow'>Today, 8:56pm</p>
                              </div>
                         </div>
-                        :<div className='flex py-4 border-b-2'>
+                        :<div className='flex py-4 border-b-2 items-center'>
                         <div className='mr-4 w-[70px] h-[70px]'>
                             <img src='./images/group-one.png'/>
                             </div>
@@ -131,8 +157,14 @@ const Grouplist = () => {
                                 <p className='font-medium font-poppins text-xs text-shadow mt-2'>Admin : {item.groupAdminName}</p>
                             </div>
                             <div className='mt-2 ml-auto'>
-                                <button
-                                onClick={()=>handelJoin(item)} className=' inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Join</button>
+                                {
+                                    joinreq.includes(data.uid + item.groupid)
+                                    ? <button className=' inline-block py-2 px-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Pending</button>
+                                    : member.includes(data.uid + item.groupid)
+                                    ?<p className='font-poppins font-medium text-xs text-shadow'>Today, 8:56pm</p>
+                                    : <button onClick={()=>handelJoin(item)} className=' inline-block py-2 px-6 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Join</button>
+                                }
+                               
                             </div>
                         </div>
                     ))

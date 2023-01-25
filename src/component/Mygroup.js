@@ -11,10 +11,11 @@ const Mygroup = () => {
     let [grouplist, setGroupList] = useState([]);
     let [btnShow, setBtnShow] = useState(true);
     let [collectdata, setCollectdata] = useState([]);
-    let [reqdata, setReqdata] = useState([]);
     let [delateBox, setDelateBox] = useState(false);
     let [reqModal, setReqModal] = useState(false);
+    let [accModal, setAccModal] = useState(false);
     let [joinReqList, setJoinReqList] = useState([]);
+    let [groupMember, setGroupMember] = useState([]);
     useEffect(()=>{
         const groupRef = ref(db, 'group/');
         onValue(groupRef, (snapshot) => {
@@ -44,25 +45,84 @@ const Mygroup = () => {
     let handelJoinReq = (gitem)=>{
         setBtnShow(!btnShow);
         setReqModal(!reqModal)
-
         const groupJoinReqRef = ref(db, 'groupJoinReq/');
         onValue(groupJoinReqRef, (snapshot) => {
            let arr = [];
             snapshot.forEach((item)=>{
                 if(data.uid == item.val().groupAdminId && item.val().groupid == gitem.groupid){
-                    arr.push({...item.val(), joinid: item.key});  
+                    arr.push({...item.val(), joinid: item.key});
                 }
             });
             setJoinReqList(arr);
-            console.log("joinReqList",joinReqList);
         });
     }
+    let handelRejectjoinreq = (item)=>{
+            remove(ref(db, 'groupJoinReq/'+item.joinid))
+    }
+    let handelAcceptjoinreq = (item)=>{
+        set(push(ref(db, 'groupmembers')), {
+            ...item,
+          }).then(()=>{
+                remove(ref(db, 'groupJoinReq/'+item.joinid))
+           });
+    }
+    let handelgroupmember =(mitem)=>{
+        setAccModal(!accModal)
+        setBtnShow(!btnShow)
+        const groupmembersRef = ref(db, 'groupmembers/');
+        onValue(groupmembersRef, (snapshot) => {
+           let arr = [];
+            snapshot.forEach((item)=>{
+                if(data.uid == item.val().groupAdminId && item.val().groupid == mitem.groupid){
+                    arr.push({...item.val(), joinid: item.key});
+                }
+            });
+            setGroupMember(arr);
+        });
+    };
   return (
     <div className='h-[347px] pt-5 pb-5 pl-5 shadow-md mt-11 rounded-lg relative'>
       <h2 className='text-sm font-poppins font-semibold text-black'>My Groups</h2>
       <BiDotsVerticalRounded className='absolute top-0 right-7 lef-0 text-2xl cursor-pointer text-secondary'/>
         <div className='h-[270px] overflow-y-scroll pr-6'>
-            { reqModal
+            { accModal 
+            ? groupMember.length == 0
+            ? <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
+                 <div onClick={()=>setAccModal(!accModal)} className='absolute top-5 right-5 cursor-pointer flex items-center text-2xl gap-1'>
+                    <GiCrossMark className='text-secondary'/>
+                    <p className='text-secondary '>Close</p>
+                 </div>
+                 <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>No Joining Request</p>
+              </div> 
+            : groupMember.map((item)=>(
+                <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
+                <div onClick={()=>setAccModal(!accModal)} className='absolute top-5 right-5 cursor-pointer flex items-center text-2xl gap-1'>
+                    <GiCrossMark className='text-secondary'/>
+                    <p className='text-secondary '>Close</p>
+                </div>
+                <div className='h-[270px] overflow-y-scroll pr-5 mt-12'>
+        
+                    <div className='flex py-4 border-b-2'>
+                        <div className='mr-4 w-[52px] h-[54px]'>
+                            <img className='w-full h-full rounded-full' src={item.reqprofile}/>
+                        </div>
+                        <div>
+                            <h2 className='font-semibold font-poppins text-sm mt-2'>{item.reqname}</h2>
+                            <p className='font-medium font-poppins text-xs text-shadow'>{item.reqemail}</p>
+                        </div>
+                        <div className='mt-2 ml-auto'>
+                            <button className='inline-block py-2 px-2 ml-2 bg-red-500 font-semibold font-poppins text-sm text-white rounded-lg'
+                              >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>          
+            </div> 
+              )) 
+            
+            :
+             reqModal
             ? joinReqList.length == 0
             ? <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
                  <div onClick={()=>setReqModal(!reqModal)} className='absolute top-5 right-5 cursor-pointer flex items-center text-2xl gap-1'>
@@ -89,11 +149,11 @@ const Mygroup = () => {
                             </div>
                             <div className='mt-2 ml-auto'>
                                 <button className='inline-block py-2 px-2 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'
-                                    >
+                                 onClick={()=>handelAcceptjoinreq(item)}   >
                                     Accept
                                 </button>
                                 <button className='inline-block py-2 px-2 ml-2 bg-red-500 font-semibold font-poppins text-sm text-white rounded-lg'
-                                    >
+                                 onClick={()=>handelRejectjoinreq(item)} >
                                     Reject
                                 </button>
                             </div>
@@ -133,7 +193,7 @@ const Mygroup = () => {
                                 <button 
                                     className='inline-block  py-2 px-5 font-semibold font-poppins text-2xl text-secondary rounded-lg'>Member Request</button>
                             </div>
-                            <div  className='flex items-center w-fit group'>
+                            <div onClick={()=>handelgroupmember(item)} className='flex items-center w-fit group'>
                                 <HiOutlineInformationCircle className='text-secondary text-2xl group-hover:text-3xl transition-all'/>
                                 <button 
                                 className='inline-block w-fit py-2 px-5 font-semibold font-poppins text-2xl text-secondary rounded-lg'>Information</button>
@@ -147,12 +207,7 @@ const Mygroup = () => {
                             <button onClick={()=>handelDelateGroup(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>
                             <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
                             </div>
-                        </div>
-                         
-                        //    joinReqList.map(()=>{
-                           
-                        // })
-                        
+                        </div>                        
                     }
                 </div>
                         
