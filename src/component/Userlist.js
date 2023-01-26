@@ -9,6 +9,7 @@ const Userlist = () => {
     let [friendreqList, setFriendreqList] = useState([])
     let [friendList, setFriendList] = useState([]) 
     let [block, setBlock] = useState([]) 
+    let [filterUser, setFilterUser] = useState([])
     const db = getDatabase();
     useEffect(()=>{
         const userRef = ref(db, 'users/');
@@ -67,21 +68,65 @@ const Userlist = () => {
             });
             setBlock(arr);
         });
-    },[])
+    },[]);
+    let handelSearch =(e)=>{
+          let arr = [];
+          if(e.target.value.length == 0){
+            setFilterUser([])
+          }else{
+            userList.filter((item)=>{           
+                if(item.username.toLowerCase().includes(e.target.value.toLowerCase())){
+                    arr.push(item)
+                }
+                setFilterUser(arr)
+              })
+        }         
+    };
   return (
     <div className='h-[451px] pt-5 pb-5 pl-5 shadow-md mt-11 rounded-lg relative'>
         <div className='flex justify-between pr-8 items-center'>
             <h2 className='text-sm font-poppins font-semibold text-black'>User list</h2>
             <div className='flex items-center shadow-md px-2'>
                 <input type="text" placeholder="Search" className='outline-none rounded-lg text-shadow font-semibold text-lg'
-                />
-                <FcSearch className='text-2xl cursor-pointer text-secondary'/>
+                 onChange={handelSearch} />
+                <FcSearch className='text-2xl cursor-pointer text-secondar'/>
             </div>
         </div>
      
            <div className='h-[370px] overflow-y-scroll pr-6'>
            
-            {
+            { filterUser.length > 0
+            ?  filterUser.map((item=>(
+                <div className='flex py-4 border-b-2'>
+                   <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
+                       <img className='w-full h-full' src={item.profile_picture}/>
+                    </div>
+                    <div>
+                        <h2 className='font-semibold font-poppins text-sm mt-2'>{item.username}</h2>
+                        <p className='font-medium font-poppins text-xs text-shadow'>{item.email}</p>
+                    </div>
+                    <div className='mt-2 ml-auto'>
+                    {friendList.includes(data.uid + item.userid) || friendList.includes(item.userid + data.uid)
+                       ?<button className='inline-block py-2 px-7 bg-green-800 font-semibold font-poppins text-sm text-white rounded-lg'>
+                        Friend
+                       </button>                    
+                    :friendreqList.includes(item.userid + data.uid) || friendreqList.includes(data.uid + item.userid )?
+                       <button className='inline-block py-2 px-4 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>
+                        Requested
+                       </button>
+                       :block.includes(item.userid + data.uid) || block.includes(data.uid + item.userid )?
+                       <button className='inline-block py-2 px-2 bg-red-600 font-semibold font-poppins text-sm text-white rounded-lg'>
+                        Unavailable
+                       </button>
+                       :<button className='inline-block py-2 px-2 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'
+                       onClick={()=>handelFriendreq(item)}>
+                        Add Request
+                       </button>
+                     }  
+                    </div>
+                </div>
+                )))
+            :
                 userList.map((item=>(
                 <div className='flex py-4 border-b-2'>
                    <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>

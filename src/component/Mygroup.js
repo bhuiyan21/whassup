@@ -88,19 +88,25 @@ const Mygroup = () => {
             { accModal 
             ? groupMember.length == 0
             ? <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
-                 <div onClick={()=>setAccModal(!accModal)} className='absolute top-5 right-5 cursor-pointer flex items-center text-2xl gap-1'>
-                    <GiCrossMark className='text-secondary'/>
-                    <p className='text-secondary '>Close</p>
-                 </div>
-                 <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>No Joining Request</p>
+                <div className='flex justify-between items-center'>
+                    <p className='justify-center font-medium font-poppins text-2xl text-secondary'>Group Members</p>
+                    <div onClick={()=>setAccModal(!accModal)} className='cursor-pointer flex items-center text-2xl gap-1'>
+                        <GiCrossMark className='text-secondary'/>
+                        <p className='text-secondary '>Close</p>
+                    </div>
+                </div>
+                 <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>No Group Member</p>
               </div> 
             : groupMember.map((item)=>(
                 <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
-                <div onClick={()=>setAccModal(!accModal)} className='absolute top-5 right-5 cursor-pointer flex items-center text-2xl gap-1'>
-                    <GiCrossMark className='text-secondary'/>
-                    <p className='text-secondary '>Close</p>
+               <div className='flex justify-between items-center'>
+                    <p className='justify-center font-medium font-poppins text-2xl text-secondary'>Group Members</p>
+                    <div onClick={()=>setAccModal(!accModal)} className='cursor-pointer flex items-center text-2xl gap-1'>
+                        <GiCrossMark className='text-secondary'/>
+                        <p className='text-secondary '>Close</p>
+                    </div>
                 </div>
-                <div className='h-[270px] overflow-y-scroll pr-5 mt-12'>
+                <div className=' h-60 overflow-y-scroll pr-5 mt-12'>
         
                     <div className='flex py-4 border-b-2'>
                         <div className='mr-4 w-[52px] h-[54px]'>
