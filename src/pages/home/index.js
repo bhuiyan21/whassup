@@ -33,12 +33,11 @@ const Home = () => {
     <>
      {
         verify ?<>
-          <div >
-           <Sidebar />
+          <div className='bg-slate-200'>
+           <Sidebar active="home"/>
           </div>
-          <div className='flex justify-around'>
+          <div className='flex justify-around bg-slate-200'>
             <div className='w-[427px] mt-2'>
-            <Searchbar/>
             <Grouplist/>
             <Mygroup/>
             </div>

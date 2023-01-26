@@ -28,9 +28,9 @@ const Friendreq = () => {
       });
   }
   return (
-    <div className='h-[347px] pt-5 pb-5 pl-5 shadow-md mt-11 rounded-lg relative'>
+    <div className='h-[347px] pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
       <h2 className='text-sm font-poppins font-semibold text-black'>Friend  Request</h2>
-      <BiDotsVerticalRounded className='absolute top-0 right-7 lef-0 text-2xl cursor-pointer text-secondary'/>
+      <BiDotsVerticalRounded className='absolute top-3 right-7 lef-0 text-2xl cursor-pointer text-secondary'/>
            <div className='h-[270px] overflow-y-scroll pr-6'>
        {
         requestfriend.length == 0

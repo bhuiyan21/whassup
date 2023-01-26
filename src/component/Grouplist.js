@@ -90,8 +90,8 @@ const Grouplist = () => {
         });
     },[])
   return (
-    <div className='h-[347px] pt-5 pb-5 pl-5 shadow-md mt-11 rounded-lg relative'>
-        <div className='flex justify-between items-center py-2'>
+    <div className='h-[418px] overflow-hidden pt-4 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
+        <div className='flex justify-between items-center py-2 pr-5'>
             <h2 className='text-sm font-poppins font-semibold text-black'>Groups List</h2>
             { show
                 ?<button onClick={handelShow} className='text-sm font-poppins font-semibold text-white rounded-lg py-2 px-5 bg-secondary'>Go Back</button>

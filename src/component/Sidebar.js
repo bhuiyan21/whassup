@@ -6,15 +6,17 @@ import { BiCrop, BiDotsVerticalRounded} from 'react-icons/bi';
 import { ImExit} from 'react-icons/im';
 import { getAuth, signOut, updateProfile } from "firebase/auth";
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
-import { useNavigate } from 'react-router';
+import { Link, useNavigate} from "react-router-dom";
 import { useDispatch, useSelector} from 'react-redux';
 import { userLoginInfo } from '../slices/userInfo/userSlice';
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
+import Searchbar from './Searchbar';
 const Sidebar = () => {
   let [uploadModal, setUploadModal] = useState(false);
   let [loader, setLoader] = useState(false);
   let [crop, setCrop] = useState(false);
+  let [logoutModal, setLogoutModal] = useState(false);
   const auth = getAuth();
   let data = useSelector((state)=>state.userLoginInfo.userInfo)
   const dispatch = useDispatch();
@@ -72,6 +74,9 @@ const Sidebar = () => {
     });
     }
   }
+  let handelLogoutmodal =()=>{
+    setLogoutModal(!logoutModal)
+  }
   // =============================
   // console.log(data);
   let handelModalOpen = ()=>{
@@ -84,18 +89,10 @@ const Sidebar = () => {
     setCropData("")
     setCropper("")
   }
- 
   return (
-    <div className='bg-secondary py-2  rounded-3xl px-20'>
-      <div className='flex items-center justify-between mb-2'>
-          <h2 className='text-center font-nunito font-bold text-lg text-white'>WhaSsuP</h2>
-          <div className='relative w-96'>
-            <input type="text" placeholder="Search" className='w-full shadow-md outline-none py-1 pl-16 rounded-lg text-shadow font-semibold text-lg'/>
-            <FaSearch className='absolute top-2 left-7 text-2xl cursor-pointer text-secondary'/>
-            <BiDotsVerticalRounded className='absolute top-2 right-7 text-2xl cursor-pointer text-secondary'/>
-          </div>
-      </div>
-      <div className='flex justify-between items-center'>
+    <div className='bg-secondary rounded-3xl mx-3'>
+      <Searchbar/>
+      <div className='flex justify-between items-center px-20'>
         <div>
           <div className='group w-16 h-16 rounded-full mx-auto relative cursor-pointer' >
             <img src={data.photoURL} className='w-full h-full rounded-full'/>
@@ -107,21 +104,26 @@ const Sidebar = () => {
           </div>
           <h1 className='text-center font-nunito font-bold text-sm text-white'>{data.displayName}</h1>
         </div>
+        <Link to="/">
         <div className='h-16 bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
-          <AiOutlineHome className="text-3xl text-secondary" />
+         <AiOutlineHome className="text-3xl text-secondary" />
         </div>
-        <div className='h-16 bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
-          <AiOutlineMessage className="text-3xl text-secondary" />
-        </div>
+        </Link>
+        <Link to="/message">
+          <div className='h-16 bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
+            <AiOutlineMessage className="text-3xl text-secondary" />
+          </div>
+        </Link>
         <div className='h-16 bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
           <IoIosNotificationsOutline className="text-5xl text-secondary" />
         </div>
         <div className='h-16 bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
           <AiOutlineSetting className="text-3xl text-secondary" />
         </div>
-        <div className='h-16 bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'
-        onClick={handelLogout} >
-          <ImExit className="text-3xl text-secondary" />
+        <div className='h-16 hover:bg-white group ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'
+        onClick={handelLogoutmodal}
+         >
+          <ImExit className="text-3xl text-white group-hover:text-secondary" />
         </div>
         {
           uploadModal && <div className='absolute top-0 left-0 w-full h-screen bg-secondary z-50 flex justify-center items-center scale-100 transition-all'>
@@ -175,14 +177,15 @@ const Sidebar = () => {
           </div>
         </div>      
         }
-        {
+        { logoutModal &&
           <div className='absolute top-0 left-0 w-full h-screen bg-[#94a3b881] z-50 flex justify-center items-center scale-100 transition-all'>
             <div className='w-96 p-3 bg-white rounded-lg text-center'>
               <p className='font-nunito font-bold text-3xl text-primary mb-3'>Log out of your account ?</p>
               <button className='py-2 px-3 mr-2 bg-red-500 rounded-lg text-white text-sm font-poppins font-semibold'
-              >Log Out</button>
+              onClick={handelLogout} >Log Out</button>
               <button className='py-2 px-3 bg-secondary rounded-lg text-white text-sm font-poppins font-semibold'
-              >Cancel</button>
+              onClick={handelLogoutmodal}
+               >Cancel</button>
               </div>
           </div>
         }
@@ -191,4 +194,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default Sidebar;

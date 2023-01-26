@@ -79,7 +79,7 @@ const Friends = () => {
     }         
 };
   return (
-    <div className='h-[451px] pt-5 pb-5 pl-5 shadow-md mt-11 rounded-lg relative'>
+    <div className='h-[418px] overflow-hidden pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
         <div className='flex justify-between pr-8 items-center'>
             <h2 className='text-sm font-poppins font-semibold text-black'>Friend List</h2>
             <div className='flex items-center shadow-md px-2'>

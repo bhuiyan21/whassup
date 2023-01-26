@@ -12,6 +12,7 @@ import Registration from './pages/registration';
 import Login from './pages/login';
 import Home from './pages/home';
 import Forgetpass from './pages/forgetpassword';
+import Message from './pages/message/Message';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/message",
+    element: <Message />,
   },
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
