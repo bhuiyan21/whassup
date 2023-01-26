@@ -48,8 +48,8 @@ const Block = () => {
 };
   return (
     <div className='h-[347px] pt-5 pb-5 pl-5 shadow-md mt-11 rounded-lg relative'>
-      <div className='flex justify-between pr-8 items-center'>
-            <h2 className='text-sm font-poppins font-semibold text-black'>User list</h2>
+        <div className='flex justify-between pr-8 items-center'>
+            <h2 className='text-sm font-poppins font-semibold text-black'>Block List</h2>
             <div className='flex items-center shadow-md px-2'>
                 <input type="text" placeholder="Search" className='outline-none rounded-lg text-shadow font-semibold text-lg'
                 onChange={handelSearch} />
@@ -129,15 +129,12 @@ const Block = () => {
                 </p>
                 </div>
             </div>
-               
-                
                     ))
             }
              </div>
     </div>
   )
 }
-
 export default Block
 
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BiDotsVerticalRounded} from 'react-icons/bi';
+import { FcSearch} from 'react-icons/fc';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
 import { useDispatch, useSelector} from 'react-redux';
 const Friends = () => {
@@ -8,6 +8,7 @@ const Friends = () => {
     let [accept, setAccept] = useState([])
     let [delateBox, setDelateBox] = useState(false);
     let [dltGroup, setDltGroup] = useState([]);
+    let [filterUser, setFilterUser] = useState([])
     useEffect(()=>{
         const acceptfrndRef = ref(db, 'friend');
         onValue(acceptfrndRef, (snapshot) => {
@@ -64,17 +65,89 @@ const Friends = () => {
           setDltGroup(blockid + blockbyid)
         }
     }  
+    let handelSearch =(e)=>{
+      let arr = [];
+      if(e.target.value.length == 0){
+        setFilterUser([])
+      }else{
+        accept.filter((item)=>{           
+            if(item.senderName.toLowerCase().includes(e.target.value.toLowerCase()) || item.receiverName.toLowerCase().includes(e.target.value.toLowerCase())){
+                arr.push(item)
+            }
+            setFilterUser(arr)
+          })
+    }         
+};
   return (
     <div className='h-[451px] pt-5 pb-5 pl-5 shadow-md mt-11 rounded-lg relative'>
-      <h2 className='text-sm font-poppins font-semibold text-black'>Friends</h2>
-      <BiDotsVerticalRounded className='absolute top-0 right-7 lef-0 text-2xl cursor-pointer text-secondary'/>
+        <div className='flex justify-between pr-8 items-center'>
+            <h2 className='text-sm font-poppins font-semibold text-black'>Friend List</h2>
+            <div className='flex items-center shadow-md px-2'>
+                <input type="text" placeholder="Search" className='outline-none rounded-lg text-shadow font-semibold text-lg'
+                onChange={handelSearch} />
+                <FcSearch className='text-2xl cursor-pointer text-secondar'/>
+            </div>
+        </div>
            <div className='h-[370px] overflow-y-scroll pr-6'>
             {
               accept.length == 0
               ? <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>Add users in your friend list </p>
+              : filterUser.length >0
+              ? filterUser.map(item=>(
+                item.senderId == data.uid 
+                ?
+                <div>
+                  {
+                    delateBox && dltGroup.includes(item.receiverId + item.senderId)
+                    ?<div className='p-7 w-full text-center'>
+                    <p className='font-nunito font-bold text-xl text-primary p-6'>Are you sure you want to block your Friend <span className='text-secondary'>{item.receiverName}</span> ?</p>
+                    <button onClick={()=>handelBlock(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>
+                    <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
+                  </div>
+                  : <div className='flex py-4 border-b-2'>
+                  <div className='mr-4 w-[52px] h-[54px]'>
+                     <img className='w-full h-full rounded-full' src={item.receiverprofile}/>
+                  </div>
+                  <div>
+                      <h2 className='font-semibold font-poppins text-sm mt-2'>{item.receiverName}</h2>
+                      <p className='font-medium font-poppins text-xs text-shadow'>{item.receiveremail}</p>
+                  </div>
+                  <div className='mt-2 ml-auto'>
+                  <button className='inline-block py-2 px-2 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'
+                 onClick={()=>handelDelateBox(item)}>
+                  Block
+                 </button>
+                  </div>
+                </div>
+                  }
+                </div>
+                : <div>
+                  { delateBox && dltGroup.includes(item.senderId + item.receiverId)
+                    ?<div className='p-7 w-full text-center'>
+                    <p className='font-nunito font-bold text-xl text-primary p-6'>Are you sure you want to block your Friend <span className='text-secondary'>{item.senderName}</span> ?</p>
+                    <button onClick={()=>handelBlock(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>
+                    <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
+                  </div>
+                  :<div className='flex py-4 border-b-2'>
+                  <div className='mr-4 w-[52px] h-[54px]'>
+                    <img className='w-full h-full rounded-full' src={item.senderprofile}/>
+                  </div>
+                      <div>
+                        <h2 className='font-semibold font-poppins text-sm mt-2'>{item.senderName}</h2>
+                        <p className='font-medium font-poppins text-xs text-shadow'>{item.senderemail}</p>
+                      </div>
+                      <div className='mt-2 ml-auto'>
+                      <button className='inline-block py-2 px-2 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'
+                       onClick={()=>handelDelateBox(item)} >
+                        Block
+                      </button>
+                    </div>
+                  </div>
+                  }
+            </div>
+                ))
               :
               accept.map(item=>(
-                
                     item.senderId == data.uid 
                     ?
                     <div>

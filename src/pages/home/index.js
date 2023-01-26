@@ -33,24 +33,24 @@ const Home = () => {
     <>
      {
         verify ?<>
-        <div className='flex gap-12'>
-        <div className='w-[186px] h-screen'>
-         <Sidebar />
-        </div>
-        <div className='w-[427px] mt-9'>
-        <Searchbar/>
-        <Grouplist/>
-        <Friendreq/>
-        </div>
-        <div className='w-[460px]'>
-        <Friends/>
-        <Mygroup/>
-        </div>
-        <div className='w-[460px]'>
-        <Userlist/>
-        <Block/>
-        </div>
-        </div>
+          <div >
+           <Sidebar />
+          </div>
+          <div className='flex justify-around'>
+            <div className='w-[427px] mt-2'>
+            <Searchbar/>
+            <Grouplist/>
+            <Mygroup/>
+            </div>
+            <div className='w-[460px]'>
+            <Friends/>
+            <Friendreq/>
+            </div>
+            <div className='w-[460px]'>
+            <Userlist/>
+            <Block/>
+            </div>
+          </div>
          </> 
         
         : <><h1 className='w-full h-screen bg-secondary flex justify-center items-center text-white font-nunito text-3xl font-semibold cursor-wait'>
@@ -62,63 +62,6 @@ const Home = () => {
         </>
       }
     </>
-     
-     
   )
 };
-export default Home;
-
-
-
-
-
-
-
-
-
-
-
-                   
-
-  // reqModal
-  // ? <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
-  //      <div onClick={()=>setReqModal(!reqModal)} className='absolute top-5 right-5 cursor-pointer flex items-center text-2xl gap-1'>
-  //         <GiCrossMark className='text-secondary'/>
-  //         <p className='text-secondary '>Close</p>
-  //     </div>
-  //         <div className='h-[270px] overflow-y-scroll pr-5 mt-12'>
-  //     {
-  //         groupreqList.map((item)=>(
-  //             groupreqMatch.includes(item.groupid + item.reqid)
-  //             &&
-  //             <div className='flex py-4 border-b-2'>
-  //                 <div className='mr-4 w-[52px] h-[54px]'>
-  //                     <img className='w-full h-full rounded-full' src={item.reqprofile}/>
-  //                 </div>
-  //                 <div>
-  //                     <h2 className='font-semibold font-poppins text-sm mt-2'>{item.reqname}</h2>
-  //                     <p className='font-medium font-poppins text-xs text-shadow'>{item.reqemail}</p>
-  //                 </div>
-  //                 <div className='mt-2 ml-auto'>
-  //                     <button className='inline-block py-2 px-2 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'
-  //                         >
-  //                         Accept
-  //                     </button>
-  //                     <button className='inline-block py-2 px-2 ml-2 bg-red-500 font-semibold font-poppins text-sm text-white rounded-lg'
-  //                         >
-  //                         Reject
-  //                     </button>
-  //                 </div>
-  //             </div>
-  //             // : <p>No Joining Request</p>
-  //         ))
-  //     }
-  //         </div>
-     
-  // </div>
-
-
-
-
-
-  // && dltGroup.includes(item.groupid + item.groupAdminId)
+export default Home;     
