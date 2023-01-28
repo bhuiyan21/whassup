@@ -37,7 +37,7 @@ const Home = () => {
            <Sidebar active="home"/>
           </div>
           <div className='flex justify-around bg-slate-200'>
-            <div className='w-[427px] mt-2'>
+            <div className='w-[460px] mt-2'>
             <Grouplist/>
             <Mygroup/>
             </div>

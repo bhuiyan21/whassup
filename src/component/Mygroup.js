@@ -108,63 +108,29 @@ const Mygroup = () => {
         <div className='h-[270px] overflow-y-scroll pr-6'>
             { accModal 
             ? groupMember.length == 0
-            ? <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
-                <div className='flex justify-between items-center'>
-                    <p className='justify-center font-medium font-poppins text-2xl text-secondary'>Group Members :</p>
+            ? <div className='absolute top-0 left-0 w-full h-full rounded overflow-hidden bg-slate-400'>
+                <div className='flex justify-between items-center p-3 bg-primary'>
+                    <p className='justify-center font-medium font-poppins text-2xl text-white'>Group Members :</p>
                     <div onClick={()=>setAccModal(!accModal)} className='cursor-pointer flex items-center text-2xl gap-1'>
-                        <GiCrossMark className='text-secondary'/>
-                        <p className='text-secondary '>Close</p>
+                        <GiCrossMark className='text-white'/>
+                        <p className='text-white '>Close</p>
                     </div>
                 </div>
                  <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>No Group Member</p>
               </div> 
-            : groupMember.map((item)=>(
-                <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
-               <div className='flex justify-between items-center'>
-                    <p className='justify-center font-medium font-poppins text-2xl text-secondary'>Group Members :</p>
+            : 
+            <div className='absolute top-0 left-0 w-full h-full rounded overflow-hidden bg-slate-400'>
+                <div className='flex justify-between items-center p-3 bg-primary'>
+                        <p className='justify-center font-medium font-poppins text-2xl text-white'>Group Members :</p>
                     <div onClick={()=>setAccModal(!accModal)} className='cursor-pointer flex items-center text-2xl gap-1'>
-                        <GiCrossMark className='text-secondary'/>
-                        <p className='text-secondary '>Close</p>
+                        <GiCrossMark className='text-white'/>
+                        <p className='text-white '>Close</p>
                     </div>
                 </div>
-                <div className=' h-60 overflow-y-scroll pr-5 mt-12'>
-                    <div className='flex py-4 border-b-2'>
-                        <div className='mr-4 w-[52px] h-[54px]'>
-                            <img className='w-full h-full rounded-full' src={item.reqprofile}/>
-                        </div>
-                        <div>
-                            <h2 className='font-semibold font-poppins text-sm mt-2'>{item.reqname}</h2>
-                            <p className='font-medium font-poppins text-xs text-shadow'>{item.reqemail}</p>
-                        </div>
-                        <div className='mt-2 ml-auto'>
-                            <button className='inline-block py-2 px-2 ml-2 bg-red-500 font-semibold font-poppins text-sm text-white rounded-lg'
-                              >
-                                Remove
-                            </button>
-                        </div>
-                    </div>
-                </div>          
-            </div> 
-              )) 
-            :
-             reqModal
-            ? joinReqList.length == 0
-            ? <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
-                 <div onClick={()=>setReqModal(!reqModal)} className='absolute top-5 right-5 cursor-pointer flex items-center text-2xl gap-1'>
-                    <GiCrossMark className='text-secondary'/>
-                    <p className='text-secondary '>Close</p>
-                </div>
-                <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>No Joining Request</p>
-            </div> 
-            : joinReqList.map((item)=>(
-                <div className='absolute top-0 left-0 w-full h-full p-2 rounded bg-slate-400'>
-                    <div onClick={()=>setReqModal(!reqModal)} className='absolute top-5 right-5 cursor-pointer flex items-center text-2xl gap-1'>
-                        <GiCrossMark className='text-secondary'/>
-                        <p className='text-secondary '>Close</p>
-                    </div>
-                    <div className='h-[270px] overflow-y-scroll pr-5 mt-12'>
-            
-                        <div className='flex py-4 border-b-2'>
+                <div className=' h-60 overflow-y-scroll px-2'>
+                    {
+                        groupMember.map((item)=>(
+                            <div className='flex py-4 border-b-2'>
                             <div className='mr-4 w-[52px] h-[54px]'>
                                 <img className='w-full h-full rounded-full' src={item.reqprofile}/>
                             </div>
@@ -173,19 +139,63 @@ const Mygroup = () => {
                                 <p className='font-medium font-poppins text-xs text-shadow'>{item.reqemail}</p>
                             </div>
                             <div className='mt-2 ml-auto'>
-                                <button className='inline-block py-2 px-2 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'
-                                 onClick={()=>handelAcceptjoinreq(item)}   >
-                                    Accept
-                                </button>
                                 <button className='inline-block py-2 px-2 ml-2 bg-red-500 font-semibold font-poppins text-sm text-white rounded-lg'
-                                 onClick={()=>handelRejectjoinreq(item)} >
-                                    Reject
+                                  >
+                                    Remove
                                 </button>
                             </div>
                         </div>
+                        ))
+                    }
+                   
+                </div>          
+            </div> 
+            :
+             reqModal
+            ? joinReqList.length == 0
+            ? <div className='absolute top-0 left-0 w-full h-full rounded overflow-hidden bg-slate-400'>
+                  <div className='flex justify-between items-center p-3 bg-primary'>
+                        <p className='justify-center font-medium font-poppins text-2xl text-white'>Group Members :</p>
+                        <div onClick={()=>setReqModal(!reqModal)} className='cursor-pointer flex items-center text-2xl gap-1'>
+                            <GiCrossMark className='text-white'/>
+                            <p className='text-white '>Close</p>
+                        </div>
+                    </div>
+                <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>No Joining Request</p>
+            </div> 
+            : <div className='absolute top-0 left-0 w-full h-full rounded overflow-hidden bg-slate-400'>
+                    <div className='flex justify-between items-center p-3 bg-primary'>
+                        <p className='justify-center font-medium font-poppins text-2xl text-white'>Group Members :</p>
+                        <div onClick={()=>setReqModal(!reqModal)} className='cursor-pointer flex items-center text-2xl gap-1'>
+                            <GiCrossMark className='text-white'/>
+                            <p className='text-white '>Close</p>
+                        </div>
+                    </div>
+                    <div className='h-[270px] overflow-y-scroll px-2'>
+                        {joinReqList.map((item)=>(
+                             <div className='flex py-4 border-b-2'>
+                             <div className='mr-4 w-[52px] h-[54px]'>
+                                 <img className='w-full h-full rounded-full' src={item.reqprofile}/>
+                             </div>
+                             <div>
+                                 <h2 className='font-semibold font-poppins text-sm mt-2'>{item.reqname}</h2>
+                                 <p className='font-medium font-poppins text-xs text-shadow'>{item.reqemail}</p>
+                             </div>
+                             <div className='mt-2 ml-auto'>
+                                 <button className='inline-block py-2 px-2 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'
+                                  onClick={()=>handelAcceptjoinreq(item)}   >
+                                     Accept
+                                 </button>
+                                 <button className='inline-block py-2 px-2 ml-2 bg-red-500 font-semibold font-poppins text-sm text-white rounded-lg'
+                                  onClick={()=>handelRejectjoinreq(item)} >
+                                     Reject
+                                 </button>
+                             </div>
+                         </div>    
+                       ))}
+                       
                     </div>          
                 </div> 
-            ))
             : grouplist.length == 0
             ? <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>No group available</p>
             : filterGroup.length > 0
