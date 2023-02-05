@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FcSearch} from 'react-icons/fc';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
 import { useDispatch, useSelector} from 'react-redux';
-const Friends = () => {
+const Friend = () => {
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
     const db = getDatabase();
     let [accept, setAccept] = useState([])
@@ -79,7 +79,7 @@ const Friends = () => {
     }         
 };
   return (
-    <div className='h-[418px] overflow-hidden pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
+    <div className='pt-5 pb-5 pl-5 mt-6 rounded-lg relative bg-white shadow-md'>
         <div className='flex justify-between pr-8 items-center'>
             <h2 className='text-sm font-poppins font-semibold text-black'>Friend List</h2>
             <div className='flex items-center shadow-md px-2'>
@@ -88,7 +88,7 @@ const Friends = () => {
                 <FcSearch className='text-2xl cursor-pointer text-secondar'/>
             </div>
         </div>
-           <div className='h-[370px] overflow-y-scroll pr-6'>
+           <div className='h-[650px] overflow-y-scroll pr-6'>
             {
               accept.length == 0
               ? <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>Add users in your friend list </p>
@@ -206,4 +206,4 @@ const Friends = () => {
   )
 }
 
-export default Friends
+export default Friend

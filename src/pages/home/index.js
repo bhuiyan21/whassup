@@ -3,7 +3,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import {useNavigate} from 'react-router';
 import Block from '../../component/Block';
 import Friendreq from '../../component/Friendreq';
-import Friends from '../../component/Friends';
+import Friends from '../../component/Friend';
 import Grouplist from '../../component/Grouplist';
 import Mygroup from '../../component/Mygroup';
 import Searchbar from '../../component/Searchbar';
@@ -18,17 +18,22 @@ const Home = () => {
   const auth = getAuth()
   let data = useSelector((state)=>state.userLoginInfo.userInfo)
   onAuthStateChanged(auth, (user)=>{
-     if(user.emailVerified){
-      setVerify(true)
-      dispatch(userLoginInfo(user))
-      localStorage.setItem("userInfo", JSON.stringify(user))
-     }
+     
+    dispatch(userLoginInfo(user))
+    localStorage.setItem("userInfo", JSON.stringify(user))
   })
+ 
+  useEffect(()=>{
+    if(data.emailVerified){
+      setVerify(true)
+    }
+  },[]);
+
   useEffect(()=>{
      if(!data){
       navigate("/login")
      }
-  });
+  },[]);
   return (
     <>
      {

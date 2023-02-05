@@ -13,6 +13,8 @@ import Login from './pages/login';
 import Home from './pages/home';
 import Forgetpass from './pages/forgetpassword';
 import Message from './pages/message/Message';
+import Profile from './pages/profile';
+import Friends from './pages/friends';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
   {
     path: "/message",
     element: <Message />,
+  },
+  {
+    path: "/profile",
+    element: <Profile/>,
+  },
+  {
+    path: "/friends",
+    element: <Friends/>,
   },
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));

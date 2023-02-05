@@ -6,7 +6,7 @@ const Message = () => {
         <div className='bg-slate-200'>
             <Sidebar active="message"/>            
         </div>
-        <p>Elias Bhuiyan</p>      
+        {/* <p>Elias Bhuiyan</p>       */}
     </div>
   )
 }
