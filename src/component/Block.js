@@ -47,7 +47,7 @@ const Block = () => {
     }         
 };
   return (
-    <div className='h-[347px] pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
+    <div className='pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
         <div className='flex justify-between pr-8 items-center'>
             <h2 className='text-sm font-poppins font-semibold text-black'>Block List</h2>
             <div className='flex items-center shadow-md px-2'>
@@ -56,7 +56,7 @@ const Block = () => {
                 <FcSearch className='text-2xl cursor-pointer text-secondar'/>
             </div>
         </div>
-           <div className='h-[270px] overflow-y-scroll pr-6'>
+           <div className='h-[650px] overflow-y-scroll pr-6'>
            { filterUser.length > 0
             ?filterUser.map(item=>(
             data.uid == item.blockbyid

@@ -46,14 +46,6 @@ const Home = () => {
             <Grouplist/>
             <Mygroup/>
             </div>
-            <div className='w-[460px]'>
-            <Friends/>
-            <Friendreq/>
-            </div>
-            <div className='w-[460px]'>
-            <Userlist/>
-            <Block/>
-            </div>
           </div>
          </> 
         

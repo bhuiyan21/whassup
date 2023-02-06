@@ -83,7 +83,7 @@ const Userlist = () => {
         }         
     };
   return (
-    <div className='h-[418px] overflow-hidden pt-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
+    <div className='pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
         <div className='flex justify-between pr-8 items-center'>
             <h2 className='text-sm font-poppins font-semibold text-black'>User list</h2>
             <div className='flex items-center shadow-md px-2'>
@@ -93,7 +93,7 @@ const Userlist = () => {
             </div>
         </div>
      
-           <div className='h-[370px] overflow-y-scroll pr-6'>
+        <div className='h-[650px] overflow-y-scroll pr-6'>
            
             { filterUser.length > 0
             ?  filterUser.map((item=>(

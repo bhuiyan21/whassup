@@ -28,10 +28,10 @@ const Friendreq = () => {
       });
   }
   return (
-    <div className='h-[347px] pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
+    <div className='pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
       <h2 className='text-sm font-poppins font-semibold text-black'>Friend  Request</h2>
       <BiDotsVerticalRounded className='absolute top-3 right-7 lef-0 text-2xl cursor-pointer text-secondary'/>
-           <div className='h-[270px] overflow-y-scroll pr-6'>
+           <div className='h-[650px] overflow-y-scroll pr-6'>
        {
         requestfriend.length == 0
         ?<p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>No user request</p>

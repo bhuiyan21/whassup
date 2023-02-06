@@ -136,7 +136,7 @@ const Friend = () => {
                     <img className='w-full h-full rounded-md' src={item.senderprofile}/>
                   </div>
                       <div>
-                        <h2 className='font-semibold font-poppins text-sm mt-2'>dsfgd{item.senderName}</h2>
+                        <h2 className='font-semibold font-poppins text-sm mt-2'>d{item.senderName}</h2>
                         <p className='font-medium font-poppins text-xs text-shadow'>{item.senderemail}</p>
                       </div>
                       <div className='mt-2 ml-auto flex gap-2'>

@@ -15,6 +15,8 @@ import Forgetpass from './pages/forgetpassword';
 import Message from './pages/message/Message';
 import Profile from './pages/profile';
 import Friends from './pages/friends';
+import Group from './pages/group';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -43,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "/friends",
     element: <Friends/>,
+  },
+  {
+    path: "/group",
+    element: <Group/>,
   },
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));

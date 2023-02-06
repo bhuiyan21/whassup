@@ -3,19 +3,21 @@ import React, {useState } from 'react'
 import Sidebar from '../../component/Sidebar'
 import { useDispatch, useSelector} from 'react-redux';
 import Cropper from "react-cropper";
+import { GiCrossMark} from 'react-icons/gi';
 import "cropperjs/dist/cropper.css";
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 import { getAuth, signOut, updateProfile } from "firebase/auth";
 import { BiCrop, BiDotsVerticalRounded} from 'react-icons/bi';
 import { AiFillCamera} from 'react-icons/ai';
+import Cover from '../../component/Cover';
 const Profile = () => {
     const storage = getStorage();
     const auth = getAuth();
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
+    console.log("adgjk",data);
     let [uploadModal, setUploadModal] = useState(false);
     let [loader, setLoader] = useState(false);
     let [crop, setCrop] = useState(false);
-
   let handelModalOpen = ()=>{
     !uploadModal && setUploadModal(true);
   }
@@ -69,21 +71,29 @@ const Profile = () => {
       });
     });
     }
-  }
+  }  
   return (
    <div>
       <Sidebar/>
         <div className='mx-24 relative'>
-            <div className='h-44'>
-             <img className='w-full h-full rounded' src="images/defaultbackground.png"/>   
+            <div>
+              <Cover/>
             </div>
-            <div onClick={handelModalOpen} className='h-40 w-40 rounded-full absolute left-0 -bottom-3/4 border-8 border-white'>
+            <div onClick={handelModalOpen} className='h-40 w-40 rounded-full absolute left-0 top-[90%]  border-8 border-white cursor-pointer'>
               <img className='w-full h-full rounded-full' src={data.photoURL}/>   
               <div className='absolute flex justify-center items-center right-2  bottom-0 w-10 h-10 rounded-full bg-slate-100'>
                <AiFillCamera className='text-xl text-secondary'/>
               </div>
             </div>
-        </div>
+          </div>  
+            <div className='mx-24 flex justify-end'>
+              <div className=' w-[88%]'>
+                <h2 className='font-semibold font-poppins text-xl'>{data.displayName}</h2>
+                <p className='font-regular font-poppins text-sm w-[580px]'>Freelance UX/UI designer, 80+ projects in web design, mobile apps  (iOS & android) and creative projects. Open to offers.</p>
+                   <button className='py-3 px-9 bg-secondary rounded-lg text-white text-xl font-poppins font-semibold'>Contact info</button>
+                 
+              </div>
+            </div>            
              {
                 uploadModal && <div className='absolute top-0 left-0 w-full h-screen bg-secondary z-50 flex justify-center items-center scale-100 transition-all'>
                 <div className='w-[30%] p-6 bg-white text-center'>

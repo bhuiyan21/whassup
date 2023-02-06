@@ -96,7 +96,7 @@ const Mygroup = () => {
       }         
   };
   return (
-    <div className='h-[347px] pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
+    <div className='pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
       <div className='flex justify-between pr-8 items-center'>
             <h2 className='text-sm font-poppins font-semibold text-black'>Your Groups</h2>
             <div className='flex items-center shadow-md px-2'>
@@ -105,7 +105,7 @@ const Mygroup = () => {
                 <FcSearch className='text-2xl cursor-pointer text-secondar'/>
             </div>
         </div>
-        <div className='h-[270px] overflow-y-scroll pr-6'>
+        <div className='h-[650px] overflow-y-scroll pr-6'>
             { accModal 
             ? groupMember.length == 0
             ? <div className='absolute top-0 left-0 w-full h-full rounded overflow-hidden bg-slate-400'>
@@ -285,7 +285,7 @@ const Mygroup = () => {
                         </div>
                     }
                     {delateBox && collectdata.includes(item.groupAdminId + item.groupid) &&
-                        <div className='absolute top-0 left-0 w-full h-full rounded bg-slate-400 flex items-center text-center'>
+                        <div className='absolute top-0 left-0 w-full h-full rounded bg-slate-400 flex items-center justify-center text-center'>
                             <div>
                             <p className='font-nunito font-bold text-xl text-primary p-8'>Are you sure you want to delate your <span className='text-secondary'>{item.groupName}</span> group ?</p>
                             <button onClick={()=>handelDelateGroup(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>

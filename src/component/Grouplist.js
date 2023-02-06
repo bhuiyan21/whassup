@@ -90,7 +90,7 @@ const Grouplist = () => {
         });
     },[])
   return (
-    <div className='h-[418px] overflow-hidden pt-4 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
+    <div className='pt-4 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
         <div className='flex justify-between items-center py-2 pr-5'>
             <h2 className='text-sm font-poppins font-semibold text-black'>Groups List</h2>
             { show
@@ -127,7 +127,7 @@ const Grouplist = () => {
                 }
             </div>
             :
-             <div className='h-[270px] overflow-y-scroll pr-6'>
+             <div className='h-[650px] overflow-y-scroll pr-6'>
                 {
                      grouplist.length == 0
                      ? <p className='h-full flex items-center justify-center font-medium font-poppins text-2xl text-shadow'>No group available</p>

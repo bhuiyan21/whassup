@@ -61,12 +61,14 @@ const Sidebar = () => {
           </div>
         </div>
        </Link>
-        <div className='h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
+       <Link to="/group">
+       <div className='h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
           <MdGroups className="text-3xl text-secondary" />
           <div className='absolute -bottom-12 -left-5 bg-shadow rounded z-20 hidden group-hover:block transition-all'>
             <p className='py-2 px-8 font-nunito font-bold text-sm text-white'>Groups</p>
           </div>
         </div>
+       </Link>
         <Link to="/message">
           <div className='h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
             <AiOutlineMessage className="text-3xl text-secondary" />
