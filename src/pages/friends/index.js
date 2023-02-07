@@ -34,7 +34,7 @@ const Friends = () => {
   return (
     <div> 
         <div className='absolute top-0 left-0 w-full'>
-          <Sidebar/>
+          <Sidebar active="friend"/>
         </div>
         <div className=' flex h-screen justify-between bg-slate-200'>
             <div className='pl-3 pt-44 font-openSans font-semibold text-shadow text-2xl w-1/6 shadow-[10px_0px_3px_-7px_rgb(0,0,0,0.2)] bg-white'>

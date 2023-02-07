@@ -16,6 +16,7 @@ import Message from './pages/message/Message';
 import Profile from './pages/profile';
 import Friends from './pages/friends';
 import Group from './pages/group';
+import Notification from './pages/notification';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
   {
     path: "/group",
     element: <Group/>,
+  },
+  {
+    path: "/notification",
+    element: <Notification/>,
   },
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));

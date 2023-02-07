@@ -10,7 +10,8 @@ import { Link, useNavigate} from "react-router-dom";
 import { useDispatch, useSelector} from 'react-redux';
 import { userLoginInfo } from '../slices/userInfo/userSlice';
 import Searchbar from './Searchbar';
-const Sidebar = () => {
+const Sidebar = ({active}) => {
+  console.log(active);
   let [logoutModal, setLogoutModal] = useState(false);
   let [profileModal, setProfileModalModal] = useState(false);
   const auth = getAuth();
@@ -46,43 +47,50 @@ const Sidebar = () => {
       <div className='flex justify-between items-center px-20'>
         
         <Link to="/">
-          <div className='h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
-           <AiOutlineHome className="text-3xl text-secondary" />
+          <div className={active =="home" ?"h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl"
+          :"h-16 group ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative"}>
+           <AiOutlineHome className={active =="home"?"text-3xl text-secondary" : "text-3xl text-white"} />
           <div className='absolute -bottom-12 -left-4 bg-shadow rounded z-20 hidden group-hover:block transition-all'>
             <p className='py-2 px-8 font-nunito font-bold text-sm text-white'>Home</p>
           </div>
           </div>
         </Link>
        <Link to="/friends">
-       <div className='h-16 group hover:bg-white group ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
-          <FaUserFriends className="text-3xl text-white group-hover:text-secondary" />
+       <div className={active =="friend" ?"h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl"
+          :"h-16 group ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative"}>
+          <FaUserFriends className={active =="friend"?"text-3xl text-secondary" : "text-3xl text-white"} />
           <div className='absolute -bottom-12 -left-4 bg-shadow rounded z-20 hidden group-hover:block transition-all'>
             <p className='py-2 px-8 font-nunito font-bold text-sm text-white'>Friends</p>
           </div>
         </div>
        </Link>
        <Link to="/group">
-       <div className='h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
-          <MdGroups className="text-3xl text-secondary" />
+       <div className={active =="group" ?"h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl"
+          :"h-16 group ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative"}>
+          <MdGroups className={active =="group"?"text-3xl text-secondary" : "text-3xl text-white"} />
           <div className='absolute -bottom-12 -left-5 bg-shadow rounded z-20 hidden group-hover:block transition-all'>
             <p className='py-2 px-8 font-nunito font-bold text-sm text-white'>Groups</p>
           </div>
         </div>
        </Link>
         <Link to="/message">
-          <div className='h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
-            <AiOutlineMessage className="text-3xl text-secondary" />
+          <div className={active =="message" ?"h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl"
+          :"h-16 group ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative"}>
+            <AiOutlineMessage className={active =="message"?"text-3xl text-secondary" : "text-3xl text-white"}/>
             <div className='absolute -bottom-12 -left-6 bg-shadow rounded z-20 hidden group-hover:block transition-all'>
             <p className='py-2 px-8 font-nunito font-bold text-sm text-white'>Message</p>
           </div>
           </div>
         </Link>
-        <div className='h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl'>
-          <IoIosNotificationsOutline className="text-5xl text-secondary" />
-          <div className='absolute -bottom-12 -left-7 bg-shadow rounded z-20 hidden group-hover:block transition-all'>
-            <p className='py-2 px-8 font-nunito font-bold text-sm text-white'>Notifications</p>
+        <Link to="/notification">
+          <div className={active =="noti" ?"h-16 group bg-white ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative before:absolute before:w-full before:h-2 before:bg-secondary before:bottom-0 before:left-0 before:rounded-tl-2xl before:rounded-tr-2xl"
+          :"h-16 group ml-6 rounded-tl-2xl rounded-tr-2xl flex items-center px-5 cursor-pointer relative"}>
+            <IoIosNotificationsOutline className={active =="noti"?"text-3xl text-secondary" : "text-3xl text-white"} />
+            <div className='absolute -bottom-12 -left-7 bg-shadow rounded z-20 hidden group-hover:block transition-all'>
+              <p className='py-2 px-8 font-nunito font-bold text-sm text-white'>Notifications</p>
+            </div>
           </div>
-        </div>
+        </Link>
         <div onClick={handelProfileModal} className="relative">
             <div className='group w-16 h-16 rounded-full mx-auto relative cursor-pointer' >
               <img src={data.photoURL} className='w-full h-full rounded-full'/>

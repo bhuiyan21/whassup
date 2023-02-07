@@ -3,14 +3,17 @@ import React, {useState } from 'react'
 import Sidebar from '../../component/Sidebar'
 import { useDispatch, useSelector} from 'react-redux';
 import Cropper from "react-cropper";
-import { GiCrossMark} from 'react-icons/gi';
+import { FaUserEdit} from 'react-icons/fa';
 import "cropperjs/dist/cropper.css";
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 import { getAuth, signOut, updateProfile } from "firebase/auth";
 import { BiCrop, BiDotsVerticalRounded} from 'react-icons/bi';
 import { AiFillCamera} from 'react-icons/ai';
 import Cover from '../../component/Cover';
-const Profile = () => {
+import Userprofile from '../../component/Userprofile';
+import Friend from '../../component/Friend';
+import Userpost from '../../component/Userpost';
+const Profile = ({active}) => {
     const storage = getStorage();
     const auth = getAuth();
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
@@ -18,7 +21,9 @@ const Profile = () => {
     let [uploadModal, setUploadModal] = useState(false);
     let [loader, setLoader] = useState(false);
     let [crop, setCrop] = useState(false);
-  let handelModalOpen = ()=>{
+    let [friends, setFriends] = useState(false);
+    let [post, setPost] = useState(false);
+    let handelModalOpen = ()=>{
     !uploadModal && setUploadModal(true);
   }
   let handelModalClose = ()=>{
@@ -72,28 +77,62 @@ const Profile = () => {
     });
     }
   }  
+  let handelProfile =()=>{
+    setFriends(false)     
+    setPost(false)
+  }
+  let handelFriends =()=>{
+    setFriends(true)     
+    setPost(false)
+  }
+  let handelPost =()=>{
+    setPost(true)
+    setFriends(false)     
+  }
   return (
-   <div>
+   <div className='bg-slate-200 pb-5'>
       <Sidebar/>
-        <div className='mx-24 relative'>
+    <div className='px-24'>
+      <div className='bg-white rounded-md px-7 pb-7'>
+        <div className='relative'>
             <div>
               <Cover/>
             </div>
-            <div onClick={handelModalOpen} className='h-40 w-40 rounded-full absolute left-0 top-[90%]  border-8 border-white cursor-pointer'>
+            <div onClick={handelModalOpen} className='h-44 w-44 rounded-full absolute left-0 top-[90%]  border-8 border-white cursor-pointer'>
               <img className='w-full h-full rounded-full' src={data.photoURL}/>   
               <div className='absolute flex justify-center items-center right-2  bottom-0 w-10 h-10 rounded-full bg-slate-100'>
                <AiFillCamera className='text-xl text-secondary'/>
               </div>
             </div>
           </div>  
-            <div className='mx-24 flex justify-end'>
-              <div className=' w-[88%]'>
-                <h2 className='font-semibold font-poppins text-xl'>{data.displayName}</h2>
-                <p className='font-regular font-poppins text-sm w-[580px]'>Freelance UX/UI designer, 80+ projects in web design, mobile apps  (iOS & android) and creative projects. Open to offers.</p>
-                   <button className='py-3 px-9 bg-secondary rounded-lg text-white text-xl font-poppins font-semibold'>Contact info</button>
-                 
+            <div className='flex justify-end'>
+              <div className=' w-[88%] mt-4 flex justify-between items-end'>
+                   <div>
+                      <h2 className='font-semibold font-poppins text-xl'>{data.displayName}</h2>
+                      <p className='font-regular font-poppins text-sm w-[580px] my-2'>Freelance UX/UI designer, 80+ projects in web design, mobile apps  (iOS & android) and creative projects. Open to offers.</p>
+                      <button className='py-2 px-9 bg-secondary rounded-lg text-white text-lg font-poppins font-medium'>Contact info</button>
+                   </div>
+                   <div className='py-1 px-3 w-fit h-fit bg-shadow rounded-md flex items-center gap-2 cursor-pointer'>
+                      <FaUserEdit className='text-xl text-white'/>
+                      <p className='text-white'>Edit Profile</p>
+                   </div>
               </div>
-            </div>            
+
+            </div>     
+          </div>  
+          <div className='flex justify-center items-end py-3 bg-white my-6 rounded-md'>
+            <button onClick={handelProfile} className={!friends && !post?'py-5 px-20 bg-secondary rounded-tl-md rounded-tr-md font-medium font-poppins text-xl text-white':'py-3 px-20 bg-white font-medium font-poppins text-xl text-shadow border border-shadow'}>PROFILE</button>
+            <button onClick={handelFriends} className={friends?'py-5 px-20 bg-secondary rounded-tl-md rounded-tr-md font-medium font-poppins text-xl text-white':'py-3 px-20 bg-white font-medium font-poppins text-xl text-shadow border border-shadow'}>FRIENDS</button>
+            <button onClick={handelPost} className={post?'py-5 px-20 bg-secondary rounded-tl-md rounded-tr-md font-medium font-poppins text-xl text-white':'py-3 px-20 bg-white font-medium font-poppins text-xl text-shadow border border-shadow'}>POST</button>
+          </div>
+          {
+              friends
+              ?<Friend active="frnd"/>
+              :post
+              ?<Userpost/>
+              :<Userprofile/>
+          }
+            
              {
                 uploadModal && <div className='absolute top-0 left-0 w-full h-screen bg-secondary z-50 flex justify-center items-center scale-100 transition-all'>
                 <div className='w-[30%] p-6 bg-white text-center'>
@@ -144,8 +183,10 @@ const Profile = () => {
                   onClick={handelModalClose}>Cancel</button>
                   </div>
                 </div>
-              </div>      
+              </div> 
+                   
               }
+      </div>
    </div>
   )
 }

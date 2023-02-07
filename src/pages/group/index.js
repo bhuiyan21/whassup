@@ -15,7 +15,7 @@ const Group = () => {
   return (
     <div>
         <div className='absolute top-0 left-0 w-full'>
-          <Sidebar/>
+          <Sidebar active="group"/>
         </div>
         <div className='flex h-screen justify-between bg-slate-200'>
         <div className='pt-44 pl-3 font-openSans font-semibold text-shadow text-2xl w-1/6 shadow-[10px_0px_3px_-7px_rgb(0,0,0,0.2)] bg-white'>
