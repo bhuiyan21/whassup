@@ -17,7 +17,6 @@ const Profile = ({active}) => {
     const storage = getStorage();
     const auth = getAuth();
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
-    console.log("adgjk",data);
     let [uploadModal, setUploadModal] = useState(false);
     let [loader, setLoader] = useState(false);
     let [crop, setCrop] = useState(false);
