@@ -35,6 +35,7 @@ const Userpost = () => {
               set(push(ref(db, 'post')),{
                 username: data.displayName,
                 userid: data.uid,
+                userphoto: data.photoURL,
                 text: postinput,
                 image: postimg,
             }).then(()=>{
