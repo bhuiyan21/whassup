@@ -4,7 +4,6 @@ import "cropperjs/dist/cropper.css";
 import { AiFillCamera} from 'react-icons/ai';
 import { GiCrossMark} from 'react-icons/gi';
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
-import { getDatabase, onValue,set,push, remove} from "firebase/database";
 import { getAuth, signOut, updateProfile } from "firebase/auth";
 const Cover = () => {
     const storage = getStorage();

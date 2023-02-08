@@ -3,10 +3,11 @@ import {RiEyeCloseFill, RiEyeFill} from 'react-icons/ri'
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider,updateProfile } from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import { Link,useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { userLoginInfo } from '../../slices/userInfo/userSlice';
 import { getDatabase, ref, set } from "firebase/database";
 const Login = () => {
+  let data = useSelector((state)=>state.userLoginInfo.userInfo)
   const db = getDatabase();
   const auth = getAuth();
   const navigate = useNavigate();
@@ -70,7 +71,11 @@ const Login = () => {
           email: user.user.email,
           profile_picture : user.user.photoURL
         })
-        navigate("/")
+        if(data.emailVerified){
+          navigate("/")
+        }else{
+          navigate("/login")
+        }
       });
     })
   }

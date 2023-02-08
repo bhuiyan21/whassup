@@ -9,6 +9,7 @@ import Userlist from '../../component/Userlist';
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { userLoginInfo } from '../../slices/userInfo/userSlice';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
+import Verify from '../../component/Verify';
 const Home = () => {
   const db = getDatabase()
   let [verify, setVerify] = useState(false)
@@ -24,12 +25,6 @@ const Home = () => {
     dispatch(userLoginInfo(user))
     localStorage.setItem("userInfo", JSON.stringify(user))
   })
-
-  useEffect(()=>{
-    if(data.emailVerified){
-      setVerify(true)
-    }
-  },[]);
 
   useEffect(()=>{
      if(!data){
@@ -93,7 +88,7 @@ useEffect(()=>{
   return (
     <div className='bg-primary'>
      {
-        verify ?<>
+        <div>
           <div className='bg-slate-200'>
            <Sidebar active="home"/>
           </div>
@@ -120,7 +115,7 @@ useEffect(()=>{
                   { 
                    post.length > 0?
                     post.map(item=>(
-                      friendList.includes(item.userid+ data.uid || data.uid + item.userid) &&
+                      friendList.includes(item.userid + data.uid || data.uid + item.userid) &&
                       item.text == ""
                       ?<div className='p-8 bg-white rounded-md mt-6 h-fit'>
                       <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
@@ -132,11 +127,11 @@ useEffect(()=>{
                             <h2 className='font-semibold font-poppins text-sm mt-2'>{item.username}</h2>
                             <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
                         </div>
-                    </div>
-                    <div className='my-3'>
-                        <img src={item.image}/>
-                    </div>
-                  </div>
+                      </div>
+                      <div className='my-3'>
+                          <img src={item.image}/>
+                      </div>
+                      </div>
                       :item.image == ''
                       ?<div className='p-8 bg-white rounded-md mt-6 h-fit'>
                       <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
@@ -148,11 +143,11 @@ useEffect(()=>{
                             <h2 className='font-semibold font-poppins text-sm mt-2'>{item.username}</h2>
                             <p className='font-medium font-poppins text-xs text-shadow'>frnditem</p>
                         </div>
-                    </div>
-                    <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
-                    </div>
+                      </div>
+                      <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
+                      </div>
                       :      
-                      <div className='p-8 bg-white rounded-md mt-6 h-fit'>
+                      <div className='p-8 bg-white rounded-md my-6 h-fit'>
                         <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
                         <div className='border-t border-slate-200 mt-3 flex pt-3'>
                             <div className='mr-4 w-16 h-16'>
@@ -174,15 +169,7 @@ useEffect(()=>{
                 </div>
             </div>
           </div>
-         </> 
-        
-        : <><h1 className='w-full h-screen bg-secondary flex justify-center items-center text-white font-nunito text-3xl font-semibold cursor-wait'>
-          Please verify your email
-          <svg class="animate-spin ml-5  h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          </svg>
-          </h1>
-        </>
+         </div> 
       }
     </div>
   )
