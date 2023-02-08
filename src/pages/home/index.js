@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import {useNavigate} from 'react-router';
-import Block from '../../component/Block';
-import Friendreq from '../../component/Friendreq';
-import Friends from '../../component/Friend';
-import Grouplist from '../../component/Grouplist';
-import Mygroup from '../../component/Mygroup';
-import Searchbar from '../../component/Searchbar';
+import { BsThreeDotsVertical} from 'react-icons/bs';
 import Sidebar from '../../component/Sidebar';
 import Userlist from '../../component/Userlist';
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { userLoginInfo } from '../../slices/userInfo/userSlice';
+import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
 const Home = () => {
+  const db = getDatabase()
   let [verify, setVerify] = useState(false)
+  let [post, setPost] =useState([])
+  let [friendList, setFriendList] = useState([]) 
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const auth = getAuth()
@@ -34,6 +33,28 @@ const Home = () => {
       navigate("/login")
      }
   },[]);
+  useEffect(()=>{
+    const postRef = ref(db, 'post');
+    onValue(postRef, (snapshot) => {
+       let arr = [];
+       snapshot.forEach((item)=>{
+          if(data.uid == item.val().userid){
+            arr.push({...item.val() , key: item.key})
+          }
+        });
+        setPost(arr)
+    });
+},[])
+useEffect(()=>{
+  const acceptfrndRef = ref(db, 'friend');
+  onValue(acceptfrndRef, (snapshot) => {
+      let arr = [];
+      snapshot.forEach((item)=>{
+          arr.push(item.val().receiverId + item.val().senderId)
+      });
+      setFriendList(arr);
+  });
+},[])
   return (
     <>
      {
@@ -43,8 +64,59 @@ const Home = () => {
           </div>
           <div className='flex justify-around bg-slate-200'>
             <div className='w-[460px] mt-2'>
-            <Grouplist/>
-            <Mygroup/>
+                 <div>
+                  {
+                  post.map(item=>(
+                    item.text == "" 
+                    ?<div className='p-8 bg-white rounded-md mt-6 h-fit'>
+                    <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
+                    <div className='border-t border-slate-200 mt-3 flex pt-3'>
+                      <div className='mr-4 w-16 h-16'>
+                          <img className='w-full h-full rounded-full' src={data.photoURL}/>
+                      </div>
+                      <div>
+                          <h2 className='font-semibold font-poppins text-sm mt-2'>{data.displayName}</h2>
+                          <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
+                      </div>
+                  </div>
+                  <div className='my-3'>
+                      <img src={item.image}/>
+                  </div>
+                </div>
+                    :item.image == '' 
+                    ?<div className='p-8 bg-white rounded-md mt-6 h-fit'>
+                    <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
+                    <div className='border-t border-slate-200 mt-3 flex pt-3'>
+                      <div className='mr-4 w-16 h-16'>
+                          <img className='w-full h-full rounded-full' src={data.photoURL}/>
+                      </div>
+                      <div>
+                          <h2 className='font-semibold font-poppins text-sm mt-2'>{data.displayName}</h2>
+                          <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
+                      </div>
+                  </div>
+                  <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
+                  </div>
+                    :      
+                    <div className='p-8 bg-white rounded-md mt-6 h-fit'>
+                      <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
+                      <div className='border-t border-slate-200 mt-3 flex pt-3'>
+                          <div className='mr-4 w-16 h-16'>
+                              <img className='w-full h-full rounded-full' src={data.photoURL}/>
+                          </div>
+                          <div>
+                              <h2 className='font-semibold font-poppins text-sm mt-2'>{data.displayName}</h2>
+                              <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
+                          </div>
+                      </div>
+                      <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
+                      <div className=' w-96'>
+                          <img src={item.image}/>
+                      </div>
+                    </div>
+                  ))
+                  }
+                </div>
             </div>
           </div>
          </> 

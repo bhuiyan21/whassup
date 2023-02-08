@@ -91,7 +91,7 @@ const Profile = ({active}) => {
   return (
    <div className='bg-slate-200 pb-5'>
       <Sidebar/>
-    <div className='px-24'>
+    <div className=' px-96'>
       <div className='bg-white rounded-md px-7 pb-7'>
         <div className='relative'>
             <div>
@@ -105,7 +105,7 @@ const Profile = ({active}) => {
             </div>
           </div>  
             <div className='flex justify-end'>
-              <div className=' w-[88%] mt-4 flex justify-between items-end'>
+              <div className='w-4/5 mt-4 flex justify-between items-end'>
                    <div>
                       <h2 className='font-semibold font-poppins text-xl'>{data.displayName}</h2>
                       <p className='font-regular font-poppins text-sm w-[580px] my-2'>Freelance UX/UI designer, 80+ projects in web design, mobile apps  (iOS & android) and creative projects. Open to offers.</p>
