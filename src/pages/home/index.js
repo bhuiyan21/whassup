@@ -38,9 +38,7 @@ const Home = () => {
     onValue(postRef, (snapshot) => {
        let arr = [];
        snapshot.forEach((item)=>{
-          if(data.uid == item.val().userid){
             arr.push({...item.val() , key: item.key})
-          }
         });
         setPost(arr)
     });
@@ -55,6 +53,9 @@ useEffect(()=>{
       setFriendList(arr);
   });
 },[])
+
+console.log("data",data.uid);
+console.log("friendList",friendList);
   return (
     <>
      {
@@ -65,56 +66,61 @@ useEffect(()=>{
           <div className='flex justify-around bg-slate-200'>
             <div className='w-[460px] mt-2'>
                  <div>
+                  <h1>{
+                    // console.log(friendList.includes(item.userid+ data.uid || data.uid + item.userid))
+                    
+                    }</h1>
                   {
-                  post.map(item=>(
-                    item.text == "" 
-                    ?<div className='p-8 bg-white rounded-md mt-6 h-fit'>
-                    <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
-                    <div className='border-t border-slate-200 mt-3 flex pt-3'>
-                      <div className='mr-4 w-16 h-16'>
-                          <img className='w-full h-full rounded-full' src={data.photoURL}/>
-                      </div>
-                      <div>
-                          <h2 className='font-semibold font-poppins text-sm mt-2'>{data.displayName}</h2>
-                          <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
-                      </div>
-                  </div>
-                  <div className='my-3'>
-                      <img src={item.image}/>
-                  </div>
-                </div>
-                    :item.image == '' 
-                    ?<div className='p-8 bg-white rounded-md mt-6 h-fit'>
-                    <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
-                    <div className='border-t border-slate-200 mt-3 flex pt-3'>
-                      <div className='mr-4 w-16 h-16'>
-                          <img className='w-full h-full rounded-full' src={data.photoURL}/>
-                      </div>
-                      <div>
-                          <h2 className='font-semibold font-poppins text-sm mt-2'>{data.displayName}</h2>
-                          <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
-                      </div>
-                  </div>
-                  <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
-                  </div>
-                    :      
-                    <div className='p-8 bg-white rounded-md mt-6 h-fit'>
+                    post.map(item=>(
+                      friendList.includes(item.userid+ data.uid || data.uid + item.userid) &&
+                      item.text == ""
+                      ?<div className='p-8 bg-white rounded-md mt-6 h-fit'>
                       <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
                       <div className='border-t border-slate-200 mt-3 flex pt-3'>
-                          <div className='mr-4 w-16 h-16'>
-                              <img className='w-full h-full rounded-full' src={data.photoURL}/>
-                          </div>
-                          <div>
-                              <h2 className='font-semibold font-poppins text-sm mt-2'>{data.displayName}</h2>
-                              <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
-                          </div>
-                      </div>
-                      <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
-                      <div className=' w-96'>
-                          <img src={item.image}/>
-                      </div>
+                        <div className='mr-4 w-16 h-16'>
+                            <img className='w-full h-full rounded-full' src={data.photoURL}/>
+                        </div>
+                        <div>
+                            <h2 className='font-semibold font-poppins text-sm mt-2'>{data.displayName}</h2>
+                            <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
+                        </div>
                     </div>
-                  ))
+                    <div className='my-3'>
+                        <img src={item.image}/>
+                    </div>
+                  </div>
+                      :item.image == ''
+                      ?<div className='p-8 bg-white rounded-md mt-6 h-fit'>
+                      <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
+                      <div className='border-t border-slate-200 mt-3 flex pt-3'>
+                        <div className='mr-4 w-16 h-16'>
+                            <img className='w-full h-full rounded-full' src={data.photoURL}/>
+                        </div>
+                        <div>
+                            <h2 className='font-semibold font-poppins text-sm mt-2'>{data.displayName}</h2>
+                            <p className='font-medium font-poppins text-xs text-shadow'>frnditem</p>
+                        </div>
+                    </div>
+                    <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
+                    </div>
+                      :      
+                      <div className='p-8 bg-white rounded-md mt-6 h-fit'>
+                        <BsThreeDotsVertical className='text-2xl cursor-pointer text-secondary ml-auto'/>
+                        <div className='border-t border-slate-200 mt-3 flex pt-3'>
+                            <div className='mr-4 w-16 h-16'>
+                                <img className='w-full h-full rounded-full' src={data.photoURL}/>
+                            </div>
+                            <div>
+                                <h2 className='font-semibold font-poppins text-sm mt-2'>{data.displayName}</h2>
+                                <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
+                            </div>
+                        </div>
+                        <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
+                        <div className=' w-96'>
+                            <img src={item.image}/>
+                        </div>
+                      </div>
+                    ))
                   }
                 </div>
             </div>
