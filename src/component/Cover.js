@@ -4,6 +4,7 @@ import "cropperjs/dist/cropper.css";
 import { AiFillCamera} from 'react-icons/ai';
 import { GiCrossMark} from 'react-icons/gi';
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
+import { getDatabase, onValue,set,push, remove} from "firebase/database";
 import { getAuth, signOut, updateProfile } from "firebase/auth";
 const Cover = () => {
     const storage = getStorage();
@@ -65,9 +66,9 @@ let handelModalCancel =()=>{
 }
   
   return (
-    <div className='w-full h-56'>
+    <div className='w-full h-56 bg-red-500 rounded-bl-md rounded-br-md'>
         {coverpreview
-        ? <div className="w-full h-full rounded overflow-hidden bg-red-500">
+        ? <div className="w-full h-full rounded overflow-hidden">
             <div className="img-preview w-full h-[300px]"></div>
         </div>
         : <img className='w-full h-full rounded' src={coverUrl}/>
@@ -80,7 +81,7 @@ let handelModalCancel =()=>{
            {
             covermodal
             ?
-            <div className="absolute top-0 left-0 w-full h-full bg-primary flex justify-center items-center">
+            <div className="absolute top-0 left-0 w-full h-full bg-primary flex justify-center items-center rounded-bl-md rounded-br-md">
                 <input onChange={handelCover} type="file"  className="text-white"/> 
                 <div onClick={()=>setCovermodal(!covermodal)} className='absolute top-5 right-5 cursor-pointer flex items-center text-xl gap-1'>
                     <GiCrossMark className='text-white'/>
