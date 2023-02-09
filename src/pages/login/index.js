@@ -71,11 +71,7 @@ const Login = () => {
           email: user.user.email,
           profile_picture : user.user.photoURL
         })
-        if(data.emailVerified){
-          navigate("/")
-        }else{
-          navigate("/login")
-        }
+         navigate("/login")
       });
     })
   }
