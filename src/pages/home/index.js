@@ -103,15 +103,13 @@ useEffect(()=>{
                       <div className='flex items-center my-3'>
                         <input onChange={handelPortInput} placeholder='What’s on your mind?' className='font-regular font-poppins text-lg text-shadow border-none outline-none p-2 w-full'/>
                         <div className='flex items-center gap-6'>
-                            <div className='relative'>
-                            <div className='w-6 h-6 bg-white absolute top-0 left-0 pointer-events-none'>
-                              <TfiGallery  className='text-3xl'/>
-                            </div>
-                            <input onChange={handelPostimg} type='file' className='w-6 h-6'/>
-                        </div>
-                        <div className='p-2 bg-secondary  rounded-md'>
-                          <RiSendPlaneFill onClick={handelPost} className=' text-2xl text-white cursor-pointer'/>
-                        </div>
+                            <label>
+                            <TfiGallery  className='text-3xl cursor-pointer'/>
+                            <input onChange={handelPostimg} type='file' className='hidden'/>
+                            </label>
+                          <div onClick={handelPost} className='p-2 bg-secondary cursor-pointer rounded-md'>
+                            <RiSendPlaneFill className=' text-2xl text-white'/>
+                          </div>
                       </div>
                     </div>
                     </div>
