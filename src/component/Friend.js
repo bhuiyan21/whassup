@@ -2,13 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { FcSearch} from 'react-icons/fc';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
 import { useDispatch, useSelector} from 'react-redux';
-const Friend = () => {
+import { activeChat } from '../slices/userInfo/activeChatSlice';
+const Friend = ({active}) => {
+  let [chat, setChat] = useState('')
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
     const db = getDatabase();
+    const dispatch = useDispatch();
     let [accept, setAccept] = useState([])
     let [delateBox, setDelateBox] = useState(false);
     let [dltGroup, setDltGroup] = useState([]);
     let [filterUser, setFilterUser] = useState([])
+    useEffect(()=>{
+      setChat("active")
+    },[])
     useEffect(()=>{
         const acceptfrndRef = ref(db, 'friend');
         onValue(acceptfrndRef, (snapshot) => {
@@ -77,7 +83,16 @@ const Friend = () => {
             setFilterUser(arr)
           })
     }         
-};
+    };
+    let handelSingleChat = (item)=>{
+      if(data.uid == item.senderId){
+        dispatch(activeChat({status: "singlemsg", name: item.receiverName, email: item.receiveremail, id: item.receiverId, profile: item.receiverprofile,}))
+        localStorage.setItem("activeSingle", JSON.stringify({status: "singlemsg", name: item.receiverName, email: item.receiveremail, id: item.receiverId, profile: item.receiverprofile,}))
+      }else{
+        dispatch(activeChat({status: "singlemsg", name: item.senderName, email: item.senderemail, id: item.senderId, profile: item.senderprofile,}))
+        localStorage.setItem("activeSingle", JSON.stringify({status: "singlemsg", name: item.senderName, email: item.senderemail, id: item.senderId, profile: item.senderprofile,}))
+      }
+    }
   return (
     <div className='pt-5 pb-5 pl-5 mt-6 rounded-lg relative bg-white shadow-md'>
         <div className='flex justify-between pr-8 items-center'>
@@ -104,6 +119,19 @@ const Friend = () => {
                     <button onClick={()=>handelBlock(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>
                     <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
                   </div>
+                  :chat == "active"
+                  ? <div onClick={()=>handelSingleChat(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
+                  <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
+                    <img className='w-full h-full' src={item.receiverprofile}/>
+                  </div>
+                  <div>
+                      <h2 className='font-semibold font-poppins text-sm mt-2'>{item.receiverName}</h2>
+                      <p className='font-medium font-poppins text-xs text-shadow'>{item.receiveremail}</p>
+                  </div>
+                  <div className='mt-2 ml-auto'>
+                    <p className='font-poppins font-medium text-xs text-shadow'>Today, 8:56pm</p>
+                  </div>
+                </div>
                   : <div className='flex py-4 border-b-2'>
                   <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                     <img className='w-full h-full' src={item.receiverprofile}/>
@@ -131,12 +159,26 @@ const Friend = () => {
                     <button onClick={()=>handelBlock(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>
                     <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
                   </div>
-                  :<div className='flex py-4 border-b-2'>
+                  :chat == "active"
+                  ?<div onClick={()=>handelSingleChat(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
                   <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                     <img className='w-full h-full' src={item.senderprofile}/>
                   </div>
                   <div>
                       <h2 className='font-semibold font-poppins text-sm mt-2'>{item.senderName}</h2>
+                      <p className='font-medium font-poppins text-xs text-shadow'>{item.senderemail}</p>
+                  </div>
+                      <div className='mt-2 ml-auto'>
+                        <p className='font-poppins font-medium text-xs text-shadow'>Today, 8:56pm</p>
+                      </div>
+                  </div>
+                  :
+                  <div className='flex py-4 border-b-2'>
+                  <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
+                    <img className='w-full h-full' src={item.senderprofile}/>
+                  </div>
+                  <div>
+                      <h2 className='font-semibold font-poppins text-sm mt-2'>dfhfdfdasfggdsfgsdfg{item.senderName}</h2>
                       <p className='font-medium font-poppins text-xs text-shadow'>{item.senderemail}</p>
                   </div>
                       <div className='mt-2 ml-auto flex gap-2'>
@@ -152,6 +194,7 @@ const Friend = () => {
                   }
             </div>
                 ))
+                // ============== Search part end ==========================
               :
               accept.map(item=>(
                     item.senderId == data.uid 
@@ -164,7 +207,21 @@ const Friend = () => {
                         <button onClick={()=>handelBlock(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>
                         <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
                       </div>
-                      : <div className='flex py-4 border-b-2'>
+                      : chat == "active"
+                      ?<div onClick={()=>handelSingleChat(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
+                      <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
+                        <img className='w-full h-full' src={item.receiverprofile}/>
+                      </div>
+                      <div>
+                          <h2 className='font-semibold font-poppins text-sm mt-2'>{item.receiverName}</h2>
+                          <p className='font-medium font-poppins text-xs text-shadow'>{item.receiveremail}</p>
+                      </div>
+                      <div className='mt-2 ml-auto'>
+                        <p className='font-poppins font-medium text-xs text-shadow'>Today, 8:56pm</p>
+                      </div>
+                    </div>
+                      :
+                       <div className='flex py-4 border-b-2'>
                       <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                         <img className='w-full h-full' src={item.receiverprofile}/>
                       </div>
@@ -193,6 +250,20 @@ const Friend = () => {
                         <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
                         </div>
                       </div>
+                      :chat == "active"
+                      ?<div onClick={()=>handelSingleChat(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
+                      <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
+                        <img className='w-full h-full' src={item.senderprofile}/>
+                      </div>
+                      <div>
+                          <h2 className='font-semibold font-poppins text-sm mt-2'>{item.senderName}</h2>
+                          <p className='font-medium font-poppins text-xs text-shadow'>{item.senderemail}</p>
+                      </div>
+                            
+                      <div className='mt-2 ml-auto'>
+                        <p className='font-poppins font-medium text-xs text-shadow'>Today, 8:56pm</p>
+                      </div>
+                  </div>
                       :<div className='flex py-4 border-b-2'>
                           <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                             <img className='w-full h-full' src={item.senderprofile}/>

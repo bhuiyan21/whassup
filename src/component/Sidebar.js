@@ -11,6 +11,7 @@ import { useDispatch, useSelector} from 'react-redux';
 import { userLoginInfo } from '../slices/userInfo/userSlice';
 import Searchbar from './Searchbar';
 const Sidebar = ({active}) => {
+  console.log(active);
   let [logoutModal, setLogoutModal] = useState(false);
   let [profileModal, setProfileModalModal] = useState(false);
   const auth = getAuth();
