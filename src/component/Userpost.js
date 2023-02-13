@@ -31,13 +31,6 @@ const Userpost = () => {
         
     };
     let handelPost =()=>{
-            let hours = new Date().getHours();
-            let minutes = new Date().getMinutes();
-            let ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12;
-            minutes = minutes < 10 ? '0'+minutes : minutes;
-            let strTime = hours + ':' + minutes + ' ' + ampm;
             if(postinput || postimg){
               set(push(ref(db, 'post')),{
                 username: data.displayName,
@@ -45,7 +38,7 @@ const Userpost = () => {
                 userphoto: data.photoURL,
                 text: postinput,
                 image: postimg,
-                date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()} at ${strTime}`, 
+                date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`, 
             }).then(()=>{
               setPostinput('')
               setPostimg('')
