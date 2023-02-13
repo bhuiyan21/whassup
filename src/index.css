@@ -11,3 +11,9 @@
     padding: 0 !important;
     transition: all .2s ease-in;
 }
+.recording{
+    position: absolute;
+    width: 100% !important;
+    height: 100% !important;
+    background: #e2e8f0 !important;
+}

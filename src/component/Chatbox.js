@@ -23,7 +23,7 @@ const Chatbox = () => {
     let [camera, setCamera] =useState(false)
     let [cameraPhotoUrl, setCameraPhotoUrl] =useState('')
     let [inputPhotoUrl, setInputPhotoUrl] =useState('')
-    let [audioUrl, setudioUrl] =useState('')
+    let [audioUrl, setAudioUrl] =useState('')
     let [chatInput, setChatInput] = useState('')
     let [chatList, setChatList] =useState([])
     function handleTakePhoto (dataUri) {
@@ -84,7 +84,7 @@ const Chatbox = () => {
 
     const addAudioElement = (blob) => {
         const url = URL.createObjectURL(blob);
-        setudioUrl(url)
+        setAudioUrl(url)
       };
   return (
     <div className='p-3 mt-6 rounded-lg relative bg-white shadow-md'>
@@ -178,20 +178,21 @@ const Chatbox = () => {
                 </div>
             </div>
            
-        <div className='border-t-2 pt-2 mt-1 flex items-center gap-2 '>
+        <div className='border-t-2 pt-2 mt-1 flex items-center gap-2'>
             
-            <div className='bg-slate-200 py-1 rounded-md flex items-center px-4 w-full relative'>
+            <div className='bg-slate-200 py-1 rounded-md px-4 w-full relative'>
             
-                <input onChange={(e)=>setChatInput(e.target.value)} className='bg-slate-200 py-2  outline-none w-full'/>
+                
                 {
                     inputPhotoUrl == ''
                     ?audioUrl
-                    ?<div className='flex items-center'>
-                           <AiFillDelete/>
-                           <audio controls className='' src={audioUrl}></audio>
+                    ?<div className='flex items-center w-full'>
+                           <AiFillDelete onClick={()=>setAudioUrl('')} className='text-3xl text-white bg-primary rounded-md cursor-pointer'/>
+                           <audio controls className='w-full' src={audioUrl}></audio>
                         </div>
                     :
-                    <div className='flex'>
+                    <div className='flex items-center relative'>
+                        <input onChange={(e)=>setChatInput(e.target.value)} className='bg-slate-200 py-2  outline-none w-full'/>
                          
                          <AudioRecorder onRecordingComplete={addAudioElement} />
                          <CgSmileMouthOpen className='text-2xl text-shadow mx-2'/>
@@ -249,7 +250,7 @@ const Chatbox = () => {
                
             </div>
             {
-               inputPhotoUrl !== '' || chatInput !== '' || cameraPhotoUrl
+               inputPhotoUrl !== '' || chatInput !== '' || cameraPhotoUrl || audioUrl
                 ?
                <button onClick={handelSendMsg} className='text-2xl text-white p-2 bg-secondary rounded-md'><FiSend/></button>
                :''
