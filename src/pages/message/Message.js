@@ -36,7 +36,7 @@ const Message = () => {
             {
               group
               ?<Chatgroup/>            
-              : <Friend/>
+              : <Friend active="chatpage"/>
             }
            </div>
            <div className='w-5/12 pt-44'>

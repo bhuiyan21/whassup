@@ -96,7 +96,11 @@ const Friend = ({active}) => {
   return (
     <div className='pt-5 pb-5 pl-5 mt-6 rounded-lg relative bg-white shadow-md'>
         <div className='flex justify-between pr-8 items-center'>
-            <h2 className='text-sm font-poppins font-semibold text-black'>Friend List</h2>
+          {
+           active == "chatpage"
+           ?<h2 className='text-sm font-poppins font-semibold text-black'>Let's talk with friends</h2>
+           :<h2 className='text-sm font-poppins font-semibold text-black'>Friend List</h2>
+          }
             <div className='flex items-center shadow-md px-2'>
                 <input type="text" placeholder="Search" className='outline-none rounded-lg text-shadow font-semibold text-lg'
                 onChange={handelSearch} />
@@ -119,7 +123,7 @@ const Friend = ({active}) => {
                     <button onClick={()=>handelBlock(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>
                     <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
                   </div>
-                  :chat == "active"
+                  : active == "chatpage"
                   ? <div onClick={()=>handelSingleChat(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
                   <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                     <img className='w-full h-full' src={item.receiverprofile}/>
@@ -159,7 +163,7 @@ const Friend = ({active}) => {
                     <button onClick={()=>handelBlock(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>
                     <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
                   </div>
-                  :chat == "active"
+                  :active == "chatpage"
                   ?<div onClick={()=>handelSingleChat(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
                   <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                     <img className='w-full h-full' src={item.senderprofile}/>
@@ -178,7 +182,7 @@ const Friend = ({active}) => {
                     <img className='w-full h-full' src={item.senderprofile}/>
                   </div>
                   <div>
-                      <h2 className='font-semibold font-poppins text-sm mt-2'>dfhfdfdasfggdsfgsdfg{item.senderName}</h2>
+                      <h2 className='font-semibold font-poppins text-sm mt-2'>{item.senderName}</h2>
                       <p className='font-medium font-poppins text-xs text-shadow'>{item.senderemail}</p>
                   </div>
                       <div className='mt-2 ml-auto flex gap-2'>
@@ -207,7 +211,7 @@ const Friend = ({active}) => {
                         <button onClick={()=>handelBlock(item)} className='inline-block py-2 px-5 mr-3 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>Yes</button>
                         <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
                       </div>
-                      : chat == "active"
+                      : active == "chatpage"
                       ?<div onClick={()=>handelSingleChat(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
                       <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                         <img className='w-full h-full' src={item.receiverprofile}/>
@@ -250,7 +254,7 @@ const Friend = ({active}) => {
                         <button onClick={()=>setDelateBox(!delateBox)} className='inline-block py-2 px-5 bg-secondary font-semibold font-poppins text-sm text-white rounded-lg'>No</button>
                         </div>
                       </div>
-                      :chat == "active"
+                      :active == "chatpage"
                       ?<div onClick={()=>handelSingleChat(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
                       <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                         <img className='w-full h-full' src={item.senderprofile}/>

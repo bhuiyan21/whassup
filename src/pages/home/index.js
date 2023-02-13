@@ -55,6 +55,13 @@ const Home = () => {
         
     };
     let handelPost =()=>{
+      let hours = new Date().getHours();
+      let minutes = new Date().getMinutes();
+      let ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      let strTime = hours + ':' + minutes + ' ' + ampm;
       if(postinput || postimg){
         set(push(ref(db, 'post')),{
           username: data.displayName,
@@ -62,6 +69,7 @@ const Home = () => {
           userphoto: data.photoURL,
           text: postinput,
           image: postimg,
+          date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()} at ${strTime}`, 
       }).then(()=>{
         setPostinput('')
         setPostimg('')
@@ -127,7 +135,7 @@ useEffect(()=>{
                         </div>
                         <div>
                             <h2 className='font-semibold font-poppins text-sm mt-2'>{item.username}</h2>
-                            <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
+                            <p className='font-medium font-poppins text-xs text-shadow'>{item.date}</p>
                         </div>
                       </div>
                       <div className='my-3'>
@@ -143,7 +151,7 @@ useEffect(()=>{
                         </div>
                         <div>
                             <h2 className='font-semibold font-poppins text-sm mt-2'>{item.username}</h2>
-                            <p className='font-medium font-poppins text-xs text-shadow'>frnditem</p>
+                            <p className='font-medium font-poppins text-xs text-shadow'>{item.date}</p>
                         </div>
                       </div>
                       <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
@@ -157,7 +165,7 @@ useEffect(()=>{
                             </div>
                             <div>
                                 <h2 className='font-semibold font-poppins text-sm mt-2'>{item.username}</h2>
-                                <p className='font-medium font-poppins text-xs text-shadow'>TIME</p>
+                                <p className='font-medium font-poppins text-xs text-shadow'>{item.date}</p>
                             </div>
                         </div>
                         <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
