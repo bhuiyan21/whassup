@@ -12,7 +12,7 @@ import Camera, { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import { useDispatch, useSelector} from 'react-redux';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
-import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL,uploadBytes  } from "firebase/storage";
 import { AudioRecorder } from 'react-audio-voice-recorder';
 import moment from 'moment';
 const Chatbox = () => {
@@ -39,6 +39,7 @@ const Chatbox = () => {
               sendname: data.displayName,
               msg: chatInput,
               img: inputPhotoUrl ? inputPhotoUrl:cameraPhotoUrl? cameraPhotoUrl:'',
+              audio: audioUrl,
               receivid: activeSingleData.id,
               receivname: activeSingleData.name,
               date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`,
@@ -46,9 +47,9 @@ const Chatbox = () => {
          setInputPhotoUrl('')
          setCamera(false)
          setCameraPhotoUrl('')
+         setAudioUrl('')
       }
       let handelImgSend =(e)=>{
-        console.log();
         const storageRef = sref(storage, 'message/' + e.target.files[0].name);
         const uploadTask = uploadBytesResumable(storageRef, e.target.files[0]);
 
@@ -84,7 +85,17 @@ const Chatbox = () => {
 
     const addAudioElement = (blob) => {
         const url = URL.createObjectURL(blob);
-        setAudioUrl(url)
+        
+        const audioStorageRef = sref(storage, 'voice/' + url);
+        
+        // 'file' comes from the Blob or File API
+        uploadBytes(audioStorageRef, blob).then((snapshot) => {
+            console.log("uploaded");
+            getDownloadURL(audioStorageRef).then((downloadURL) => {
+                console.log('File available at', downloadURL);
+                setAudioUrl(downloadURL)
+          });
+        });   
       };
   return (
     <div className='p-3 mt-6 rounded-lg relative bg-white shadow-md'>
@@ -116,6 +127,11 @@ const Chatbox = () => {
                             />
                             <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
+                        :item.audio
+                        ?<div className='relative mr-2 my-6  ml-auto w-64'>
+                        <audio controls className='w-full' src={item.audio}> </audio>
+                            <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                        </div>
                         :
                         <div className='relative mr-2 my-1 w-11/12 ml-auto'>
                         <p className='py-2 px-10 bg-secondary rounded-tl-md rounded-tr-md rounded-bl-md w-fit ml-auto  text-white'>{item.msg}</p>
@@ -132,6 +148,11 @@ const Chatbox = () => {
                         imageBackgroundColor='#5F35F5'
                         />
                         <p className='text-shadow'>{item.date}</p>
+                        </div>
+                        :item.audio
+                        ?<div className='ml-2 my-6 w-64'>
+                        <audio controls className='w-full' src={item.audio}> </audio>
+                            <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
                         :
                         <div className='relative ml-2 my-1 w-11/12'>
