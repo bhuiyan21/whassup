@@ -4,8 +4,10 @@ import { RiSendPlaneFill, RiDeleteBin2Fill} from 'react-icons/ri';
 import { BsThreeDotsVertical} from 'react-icons/bs';
 import { useDispatch, useSelector} from 'react-redux';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
+import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL,uploadBytes  } from "firebase/storage";
 const Userpost = () => {
     const db = getDatabase()
+    const storage = getStorage();
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
     let [postinput, setPostinput] =useState('')
     let [postimg, setPostimg] =useState('')
@@ -14,22 +16,27 @@ const Userpost = () => {
     let handelPortInput =(e)=>{
         setPostinput(e.target.value)
     }
-    const handelPostimg = (e) => {
-        e.preventDefault();
-        let files;
-        if (e.dataTransfer) {
-            files = e.dataTransfer.files;
-        } else if (e.target) {
-            files = e.target.files;
-        }
-        
-        const reader = new FileReader();
-        reader.onload = () => {
-            setPostimg(reader.result);
-        };
-        reader.readAsDataURL(files[0]);
-        
-    };
+ 
+    let handelPostimg =(e)=>{
+      const storageRef = sref(storage, 'upload/' + e.target.files[0].name);
+      const uploadTask = uploadBytesResumable(storageRef, e.target.files[0]);
+
+      uploadTask.on('state_changed', 
+      (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+         
+      }, 
+      (error) => {
+         console.log(error);
+      }, 
+      () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setPostimg(downloadURL)
+          });
+      }
+      );
+    }
     let handelPost =()=>{
             if(postinput || postimg){
               set(push(ref(db, 'post')),{

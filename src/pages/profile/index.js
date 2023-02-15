@@ -59,7 +59,7 @@ const Profile = ({active}) => {
   const uploadProfile = ()=>{
     if (typeof cropper !== "undefined") {
       setLoader(true)
-      const storageRef = ref(storage, auth.currentUser.uid);
+      const storageRef = ref(storage, 'profile/' + auth.currentUser.uid);
       const message4 = cropper.getCroppedCanvas().toDataURL();
       uploadString(storageRef, message4, 'data_url').then((snapshot) => {
         getDownloadURL(storageRef).then((downloadURL) => {

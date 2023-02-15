@@ -15,12 +15,14 @@ import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
 import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL,uploadBytes  } from "firebase/storage";
 import { AudioRecorder } from 'react-audio-voice-recorder';
 import moment from 'moment';
+import EmojiPicker from 'emoji-picker-react';
 const Chatbox = () => {
     const storage = getStorage();
     const db = getDatabase();
     const activeSingleData = useSelector(state=> state.activeChat.active)
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
     let [camera, setCamera] =useState(false)
+    let [emojiModal, setEmojiModal] =useState(false)
     let [cameraPhotoUrl, setCameraPhotoUrl] =useState('')
     let [inputPhotoUrl, setInputPhotoUrl] =useState('')
     let [audioUrl, setAudioUrl] =useState('')
@@ -48,6 +50,8 @@ const Chatbox = () => {
          setCamera(false)
          setCameraPhotoUrl('')
          setAudioUrl('')
+         setChatInput('')
+         setEmojiModal(false)
       }
       let handelImgSend =(e)=>{
         const storageRef = sref(storage, 'message/' + e.target.files[0].name);
@@ -97,6 +101,10 @@ const Chatbox = () => {
           });
         });   
       };
+      let handelEmoji=(e)=>{
+        setChatInput(chatInput + e.emoji);
+        console.log(chatInput);
+      }
   return (
     <div className='p-3 mt-6 rounded-lg relative bg-white shadow-md'>
          <div>
@@ -111,7 +119,7 @@ const Chatbox = () => {
                     </div>
                 </div>
                 {/* Recever profile end */}
-                <div className='h-[560px] overflow-y-scroll pr-6'>
+                <div  className={emojiModal?'h-[260px] overflow-y-scroll pr-6':'h-[560px] transition-all overflow-y-scroll pr-6'}>
                     {/* Recever message start */}
                     {
                        chatList.map(item=>(
@@ -134,7 +142,7 @@ const Chatbox = () => {
                         </div>
                         :
                         <div className='relative mr-2 my-1 w-11/12 ml-auto'>
-                        <p className='py-2 px-10 bg-secondary rounded-tl-md rounded-tr-md rounded-bl-md w-fit ml-auto  text-white'>{item.msg}</p>
+                        <p className='py-1 px-3 bg-secondary rounded-tl-md rounded-tr-md rounded-bl-md w-fit ml-auto  text-white'>{item.msg}</p>
                         <BsFillTriangleFill className='absolute bottom-[17px] -right-2 text-secondary text-xl rotate-6'/>
                         <p className='text-slate-400 text-end text-[12px] mr-2'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
@@ -199,83 +207,97 @@ const Chatbox = () => {
                 </div>
             </div>
            
-        <div className='border-t-2 pt-2 mt-1 flex items-center gap-2'>
-            
-            <div className='bg-slate-200 py-1 rounded-md px-4 w-full relative'>
-            
-                
-                {
-                    inputPhotoUrl == ''
-                    ?audioUrl
-                    ?<div className='flex items-center w-full'>
-                           <AiFillDelete onClick={()=>setAudioUrl('')} className='text-3xl text-white bg-primary rounded-md cursor-pointer'/>
-                           <audio controls className='w-full' src={audioUrl}></audio>
-                        </div>
-                    :
-                    <div className='flex items-center relative'>
-                        <input onChange={(e)=>setChatInput(e.target.value)} className='bg-slate-200 py-2  outline-none w-full'/>
-                         
-                         <AudioRecorder onRecordingComplete={addAudioElement} />
-                         <CgSmileMouthOpen className='text-2xl text-shadow mx-2'/>
-                        <div>
-                        <AiOutlineCamera onClick={()=>setCamera(!camera)} className='text-2xl text-shadow cursor-pointer'/>
+        <div className=''>
+            <div>
+              <div className='border-t-2 pt-2 mt-1 flex items-center gap-2'>
+                <div className='bg-slate-200 py-1 rounded-md px-4 w-full relative'>
+                    
+                        
                         {
-                            camera&&
-                            <div className='absolute w-full h-fit bottom-0 left-0 rounded-md overflow-hidden bg-slate-200'>
-                                <div  className='flex justify-between cursor-pointer ml-auto'>
-                            <div onClick={()=>setCameraPhotoUrl('')} className='flex gap-1'>
-                               <p className='font-semibold font-poppins text-xl text-secondary'>Retry</p>
-                               <HiRefresh className='text-secondary text-2xl'/>
+                            inputPhotoUrl == ''
+                            ?audioUrl
+                            ?<div className='flex items-center w-full'>
+                                <AiFillDelete onClick={()=>setAudioUrl('')} className='text-3xl text-white bg-primary rounded-md cursor-pointer'/>
+                                <audio controls className='w-full' src={audioUrl}></audio>
+                                </div>
+                            :
+                            <div>
+                                                    
+                            
+                                <div className='flex items-center relative'>
+                                    <input onChange={(e)=>setChatInput(e.target.value)} className='bg-slate-200 py-2  outline-none w-full'
+                                    value={chatInput}/>
+                                    
+                                    
+                                    <AudioRecorder onRecordingComplete={addAudioElement} />
+                                    <CgSmileMouthOpen onClick={()=>setEmojiModal(!emojiModal)} className='text-2xl text-shadow mx-2 cursor-pointer'/>
+                                    <div>
+                                    <AiOutlineCamera onClick={()=>setCamera(!camera)} className='text-2xl text-shadow cursor-pointer'/>
+                                    {
+                                        camera&&
+                                        <div className='absolute w-full h-fit bottom-0 left-0 rounded-md overflow-hidden bg-slate-200'>
+                                            <div  className='flex justify-between cursor-pointer ml-auto'>
+                                        <div onClick={()=>setCameraPhotoUrl('')} className='flex gap-1'>
+                                        <p className='font-semibold font-poppins text-xl text-secondary'>Retry</p>
+                                        <HiRefresh className='text-secondary text-2xl'/>
+                                        </div>
+                                        <div onClick={handelCameraClose} className='flex gap-1'>
+                                        <p className='font-semibold font-poppins text-xl text-secondary'>Close</p>
+                                        <GiCrossMark className='text-secondary text-2xl'/>
+                                        </div>
+                                    </div>
+                                    {
+                                        cameraPhotoUrl
+                                        ?<img src={cameraPhotoUrl}/>
+                                        :<Camera
+                                        onTakePhoto = { (dataUri) => { handleTakePhoto(dataUri); } }
+                                        idealFacingMode = {FACING_MODES.ENVIRONMENT}
+                                        imageType = {IMAGE_TYPES.JPG}
+                                        imageCompression = {0.97}
+                                        isMaxResolution = {true}
+                                        isImageMirror = {true}
+                                        isSilentMode = {false}
+                                        isDisplayStartCameraError = {true}
+                                        isFullscreen = {false}
+                                        sizeFactor = {1}
+                                    />   
+                                    }
+                                                            
+                                </div>
+                            }
+                                
                             </div>
-                            <div onClick={handelCameraClose} className='flex gap-1'>
-                               <p className='font-semibold font-poppins text-xl text-secondary'>Close</p>
-                               <GiCrossMark className='text-secondary text-2xl'/>
-                            </div>
+                            <label>
+                            <TfiGallery className='text-2xl text-shadow ml-2 cursor-pointer'/>
+                            <input onChange={handelImgSend} type='file' className='hidden'></input>
+                            </label>
                         </div>
-                        {
-                            cameraPhotoUrl
-                            ?<img src={cameraPhotoUrl}/>
-                            :<Camera
-                            onTakePhoto = { (dataUri) => { handleTakePhoto(dataUri); } }
-                            idealFacingMode = {FACING_MODES.ENVIRONMENT}
-                            imageType = {IMAGE_TYPES.JPG}
-                            imageCompression = {0.97}
-                            isMaxResolution = {true}
-                            isImageMirror = {true}
-                            isSilentMode = {false}
-                            isDisplayStartCameraError = {true}
-                            isFullscreen = {false}
-                            sizeFactor = {1}
-                        />   
+                            </div>
+                        :<div className='absolute w-full bottom-0 left-0 p-3 bg-slate-200 rounded-md flex justify-between'>
+                            <div>
+                            <img className='max-w-[100px]' src={inputPhotoUrl}/>
+                            </div>
+                            <div onClick={()=>setInputPhotoUrl('')} className='flex gap-1 items-center h-fit cursor-pointer'>
+                                    <p className='font-semibold font-poppins text-sm text-secondary'>Close</p>
+                                    <GiCrossMark className='text-secondary text-sm'/>
+                                    </div>
+                            </div>
                         }
-                                                
-                     </div>
-                  }
-                     
+                    
                 </div>
-                <label>
-                  <TfiGallery className='text-2xl text-shadow ml-2 cursor-pointer'/>
-                  <input onChange={handelImgSend} type='file' className='hidden'></input>
-                </label>
-                </div>
-                :<div className='absolute w-full bottom-0 left-0 p-3 bg-slate-200 rounded-md flex justify-between'>
-                    <div>
-                      <img className='max-w-[100px]' src={inputPhotoUrl}/>
-                    </div>
-                    <div onClick={()=>setInputPhotoUrl('')} className='flex gap-1 items-center h-fit cursor-pointer'>
-                               <p className='font-semibold font-poppins text-sm text-secondary'>Close</p>
-                               <GiCrossMark className='text-secondary text-sm'/>
-                            </div>
-                    </div>
-                }
-               
-            </div>
-            {
+                {
                inputPhotoUrl !== '' || chatInput !== '' || cameraPhotoUrl || audioUrl
                 ?
                <button onClick={handelSendMsg} className='text-2xl text-white p-2 bg-secondary rounded-md'><FiSend/></button>
                :''
-            }
+               }
+              </div>
+              {
+                emojiModal
+                && <EmojiPicker onEmojiClick={handelEmoji}/>
+              }
+            </div> 
+            
         </div>
     </div>
   )

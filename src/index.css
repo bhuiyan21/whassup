@@ -17,3 +17,17 @@
     height: 100% !important;
     background: #e2e8f0 !important;
 }
+.EmojiPickerReact {
+    /* position: absolute !important;
+    top: 0;
+    left: 0; */
+    width: 100% !important;
+    height: 300px !important;
+}
+.EmojiPickerReact .epr-header .epr-header-overlay,
+.EmojiPickerReact .epr-category-nav{
+    padding: 5px 5px !important;
+}
+.EmojiPickerReact .Flex {
+    display: none !important;
+}

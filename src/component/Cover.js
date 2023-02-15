@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { AiFillCamera} from 'react-icons/ai';
 import { GiCrossMark} from 'react-icons/gi';
+import { getDatabase, ref as sref, onValue,set,push, remove} from "firebase/database";
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 import { getAuth, signOut, updateProfile } from "firebase/auth";
+import { useDispatch, useSelector} from 'react-redux';
 const Cover = () => {
+  let data = useSelector((state)=>state.userLoginInfo.userInfo)
+  const db = getDatabase()
     const storage = getStorage();
     const auth = getAuth();
     const [coverUrl, setCoverUrl] = useState("");
@@ -16,6 +20,8 @@ const Cover = () => {
     const [image, setImage] = useState();
     const [cropData, setCropData] = useState("#");
     const [cropper, setCropper] = useState();
+    const [coverimg, setCoverimg] = useState('');
+    const [coverarr, setCoverarr] = useState([]);
     const handelCover = (e) => {
         setCoverMainmodal(!coverMainmodal)
         setCovermodal(!covermodal)
@@ -28,21 +34,25 @@ const Cover = () => {
       } else if (e.target) {
         files = e.target.files;
       }
-    
       const reader = new FileReader();
       reader.onload = () => {
         setImage(reader.result);
       };
       reader.readAsDataURL(files[0]);
+      setCoverimg(files[0].name);
     };
       const uploadCover = ()=>{
         if (typeof cropper !== "undefined") {
-          const storageRef = ref(storage, auth.currentUser.uid);
+          const storageRef = ref(storage,'cover/' + coverimg );
           const message4 = cropper.getCroppedCanvas().toDataURL();
           uploadString(storageRef, message4, 'data_url').then((snapshot) => {
             getDownloadURL(storageRef).then((downloadURL) => {
                 setCoverUrl(downloadURL)
           }).then(()=>{
+            set(push(sref(db, 'cover')),{
+              cover: coverUrl,
+              user: data.uid,
+          })
             setImage('')
             setCoverMainmodal(!coverMainmodal)
             setCoverpreview(!coverpreview)
@@ -63,14 +73,28 @@ let handelModalCancel =()=>{
     setCoverMainmodal(!coverMainmodal)
     setCoverpreview(!coverpreview)
 }
-  
+useEffect(()=>{
+  const coverRef = sref(db, 'cover');
+  onValue(coverRef, (snapshot) => {
+     let arr = [];
+     snapshot.forEach((item)=>{
+      if(data.uid == item.val().user)
+          arr.push(item.val())
+      });
+      setCoverarr(arr)
+  });
+},[]) 
   return (
     <div className='w-full h-56 bg-red-500 rounded-bl-md rounded-br-md'>
         {coverpreview
         ? <div className="w-full h-full rounded overflow-hidden">
             <div className="img-preview w-full h-[300px]"></div>
         </div>
-        : <img className='w-full h-full rounded' src={coverUrl}/>
+        :
+          coverarr.map(item=>(
+            <img className='w-full h-full rounded' src={item.cover}/>
+          ))
+        
         }
               
              <div onClick={handelCoverUpload}  className='absolute bottom-3 right-3 py-2 px-3 bg-white rounded-md flex items-center gap-2 cursor-pointer overflow-hidden'>
