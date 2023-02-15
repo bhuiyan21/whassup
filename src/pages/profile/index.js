@@ -43,7 +43,6 @@ const Profile = ({active}) => {
     } else if (e.target) {
       files = e.target.files;
     }
-  
     const reader = new FileReader();
     reader.onload = () => {
       setImage(reader.result);
@@ -130,8 +129,7 @@ const Profile = ({active}) => {
               :post
               ?<Userpost/>
               :<Userprofile/>
-          }
-            
+          }            
              {
                 uploadModal && <div className='absolute top-0 left-0 w-full h-screen bg-secondary z-50 flex justify-center items-center scale-100 transition-all'>
                 <div className='w-[30%] p-6 bg-white text-center'>
@@ -159,7 +157,6 @@ const Profile = ({active}) => {
                     }}
                     guides={true}
                   />
-                  
                   <div><button onClick={getCropData} className='flex mx-auto py-2 px-4 my-3 bg-secondary rounded-lg text-white text-xl font-poppins font-semibold'> <BiCrop className='mr-2'/> <span>Crop Image</span></button>
                     {
                       crop && <img src={cropData} className=' w-40 h-40 rounded-full mx-auto my-6' alt="cropped" />
@@ -183,11 +180,9 @@ const Profile = ({active}) => {
                   </div>
                 </div>
               </div> 
-                   
               }
       </div>
    </div>
   )
 }
-
 export default Profile

@@ -61,7 +61,6 @@ const Chatbox = () => {
         (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log('Upload is ' + progress + '% done');
-           
         }, 
         (error) => {
            console.log(error);
@@ -86,24 +85,18 @@ const Chatbox = () => {
             setChatList(arr);
         });
     },[activeSingleData.id])
-
     const addAudioElement = (blob) => {
         const url = URL.createObjectURL(blob);
-        
         const audioStorageRef = sref(storage, 'voice/' + url);
         
-        // 'file' comes from the Blob or File API
         uploadBytes(audioStorageRef, blob).then((snapshot) => {
-            console.log("uploaded");
             getDownloadURL(audioStorageRef).then((downloadURL) => {
-                console.log('File available at', downloadURL);
                 setAudioUrl(downloadURL)
           });
         });   
       };
       let handelEmoji=(e)=>{
         setChatInput(chatInput + e.emoji);
-        console.log(chatInput);
       }
   return (
     <div className='p-3 mt-6 rounded-lg relative bg-white shadow-md'>
@@ -203,16 +196,12 @@ const Chatbox = () => {
                         <p className='text-shadow'>Today, 2:13pm</p>
                     </div> */}
                     {/* Sender video end */}
-                            
                 </div>
             </div>
-           
         <div className=''>
             <div>
               <div className='border-t-2 pt-2 mt-1 flex items-center gap-2'>
                 <div className='bg-slate-200 py-1 rounded-md px-4 w-full relative'>
-                    
-                        
                         {
                             inputPhotoUrl == ''
                             ?audioUrl
@@ -221,14 +210,10 @@ const Chatbox = () => {
                                 <audio controls className='w-full' src={audioUrl}></audio>
                                 </div>
                             :
-                            <div>
-                                                    
-                            
+                            <div>         
                                 <div className='flex items-center relative'>
                                     <input onChange={(e)=>setChatInput(e.target.value)} className='bg-slate-200 py-2  outline-none w-full'
                                     value={chatInput}/>
-                                    
-                                    
                                     <AudioRecorder onRecordingComplete={addAudioElement} />
                                     <CgSmileMouthOpen onClick={()=>setEmojiModal(!emojiModal)} className='text-2xl text-shadow mx-2 cursor-pointer'/>
                                     <div>
@@ -261,11 +246,9 @@ const Chatbox = () => {
                                         isFullscreen = {false}
                                         sizeFactor = {1}
                                     />   
-                                    }
-                                                            
+                                    }               
                                 </div>
                             }
-                                
                             </div>
                             <label>
                             <TfiGallery className='text-2xl text-shadow ml-2 cursor-pointer'/>
@@ -283,7 +266,6 @@ const Chatbox = () => {
                                     </div>
                             </div>
                         }
-                    
                 </div>
                 {
                inputPhotoUrl !== '' || chatInput !== '' || cameraPhotoUrl || audioUrl
@@ -297,7 +279,6 @@ const Chatbox = () => {
                 && <EmojiPicker onEmojiClick={handelEmoji}/>
               }
             </div> 
-            
         </div>
     </div>
   )

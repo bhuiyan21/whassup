@@ -49,10 +49,6 @@ const Cover = () => {
             getDownloadURL(storageRef).then((downloadURL) => {
                 setCoverUrl(downloadURL)
           }).then(()=>{
-            set(push(sref(db, 'cover')),{
-              cover: coverUrl,
-              user: data.uid,
-          })
             setImage('')
             setCoverMainmodal(!coverMainmodal)
             setCoverpreview(!coverpreview)
@@ -67,23 +63,11 @@ const Cover = () => {
     };
     let handelCoverUpload =()=>{
         setCovermodal(!covermodal)
-        console.log("aeljfhsdlui");
     }
 let handelModalCancel =()=>{
     setCoverMainmodal(!coverMainmodal)
     setCoverpreview(!coverpreview)
 }
-useEffect(()=>{
-  const coverRef = sref(db, 'cover');
-  onValue(coverRef, (snapshot) => {
-     let arr = [];
-     snapshot.forEach((item)=>{
-      if(data.uid == item.val().user)
-          arr.push(item.val())
-      });
-      setCoverarr(arr)
-  });
-},[]) 
   return (
     <div className='w-full h-56 bg-red-500 rounded-bl-md rounded-br-md'>
         {coverpreview
@@ -91,12 +75,8 @@ useEffect(()=>{
             <div className="img-preview w-full h-[300px]"></div>
         </div>
         :
-          coverarr.map(item=>(
-            <img className='w-full h-full rounded' src={item.cover}/>
-          ))
-        
-        }
-              
+            <img className='w-full h-full rounded' src={coverUrl}/>
+        }        
              <div onClick={handelCoverUpload}  className='absolute bottom-3 right-3 py-2 px-3 bg-white rounded-md flex items-center gap-2 cursor-pointer overflow-hidden'>
                 <AiFillCamera className='text-xl text-shadow'/>
                 <p className='text-shadow'>Edit cover photo</p>
@@ -110,7 +90,6 @@ useEffect(()=>{
                     <GiCrossMark className='text-white'/>
                     <p className='text-white '>Close</p>
                 </div>
-                
             </div> 
             : coverMainmodal && <div className="absolute top-0 left-0  w-full h-[650px] z-50 pt-64 px-4 flex justify-center">
                 <div className="bg-secondary rounded-lg p-4 flex-col">
@@ -139,9 +118,7 @@ useEffect(()=>{
                 </div>
             </div>
            }
-          
     </div>
   )
 }
-
 export default Cover

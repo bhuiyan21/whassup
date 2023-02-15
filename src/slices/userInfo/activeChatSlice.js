@@ -14,5 +14,4 @@ export const activeChatSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const { activeChat } = activeChatSlice.actions
-
 export default activeChatSlice.reducer
