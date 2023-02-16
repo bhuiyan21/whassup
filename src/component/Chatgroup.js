@@ -4,9 +4,11 @@ import { HiOutlineInformationCircle} from 'react-icons/hi';
 import { FcSearch} from 'react-icons/fc';
 import { GiCrossMark} from 'react-icons/gi';
 import { AiTwotoneDelete, AiOutlineUsergroupAdd} from 'react-icons/ai';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getDatabase, ref, onValue, set,push , remove} from "firebase/database";
+import { activeChat } from '../slices/userInfo/activeChatSlice';
 const Chatgroup = () => {
+    const dispatch = useDispatch()
     const db = getDatabase();
     let data = useSelector((state)=>state.userLoginInfo.userInfo);
     let [grouplist, setGroupList] = useState([]);
@@ -17,12 +19,11 @@ const Chatgroup = () => {
         onValue(groupRef, (snapshot) => {
            let arr = [];
             snapshot.forEach((item)=>{
-                    arr.push(item.val());                  
+                    arr.push({...item.val(), key: item.key,});   
             });
             setGroupList(arr);
         });
     },[]);
-
    useEffect(()=>{
     const groupmembersRef = ref(db, 'groupmembers/');
     onValue(groupmembersRef, (snapshot) => {
@@ -33,7 +34,6 @@ const Chatgroup = () => {
         setGroupMember(arr);
     });
    },[])
-   console.log("groupMemberNow",groupMember.includes(data.uid));
     let handelSearch =(e)=>{
         let arr = [];
         if(e.target.value.length == 0){
@@ -46,7 +46,12 @@ const Chatgroup = () => {
               setFilterGroup(arr)
             })
       }         
-  };
+    };
+    let handelGmsg =(item)=>{
+        console.log("gmsg",item);
+        dispatch(activeChat({status: "groupmsg", name: item.groupName, gid: item.key}))
+        localStorage.setItem("activeSingle", JSON.stringify({status: "groupmsg", name: item.groupName, gid: item.key}))
+    }
   return (
     <div className='pt-5 pb-5 pl-5 shadow-md mt-6 rounded-lg relative bg-white'>
       <div className='flex justify-between pr-8 items-center'>
@@ -63,7 +68,7 @@ const Chatgroup = () => {
                     groupMember.length > 0
                     ?
                     groupMember.includes(data.uid) &&
-                    <div className='flex py-4 border-b-2 items-center'>
+                    <div onClick={()=>handelGmsg(item)} className='flex py-4 border-b-2 items-center'>
                     <div className='mr-4 w-[52px] h-[54px]'>
                     <img src='./images/friendreq-one.png'/>
                     </div>
@@ -77,7 +82,7 @@ const Chatgroup = () => {
                         </div>
                      </div>
                    : data.uid === item.groupAdminId && 
-                    <div className='flex py-4 border-b-2 items-center'>
+                    <div onClick={()=>handelGmsg(item)} className='flex py-4 border-b-2 items-center'>
                     <div className='mr-4 w-[52px] h-[54px]'>
                     <img src='./images/friendreq-one.png'/>
                     </div>
@@ -91,12 +96,9 @@ const Chatgroup = () => {
                     </div>
                 </div>
                 ))
-             }
-                
-              
+             }              
         </div>
     </div>
   )
 }
-
 export default Chatgroup

@@ -28,6 +28,7 @@ const Chatbox = () => {
     let [audioUrl, setAudioUrl] =useState('')
     let [chatInput, setChatInput] = useState('')
     let [chatList, setChatList] =useState([])
+    let [gmsgList, setGmsgList] =useState([])
     function handleTakePhoto (dataUri) {
         setCameraPhotoUrl(dataUri);
       }
@@ -36,16 +37,30 @@ const Chatbox = () => {
         setCameraPhotoUrl('')
       }
       let handelSendMsg =()=>{
-         set(push(ref(db, 'singleChat')),{
-              sendid: data.uid,
-              sendname: data.displayName,
-              msg: chatInput,
-              img: inputPhotoUrl ? inputPhotoUrl:cameraPhotoUrl? cameraPhotoUrl:'',
-              audio: audioUrl,
-              receivid: activeSingleData.id,
-              receivname: activeSingleData.name,
-              date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`,
-         });
+        if(activeSingleData.status == "singlemsg" ){
+            set(push(ref(db, 'singleChat')),{
+                 sendid: data.uid,
+                 sendname: data.displayName,
+                 msg: chatInput,
+                 img: inputPhotoUrl ? inputPhotoUrl:cameraPhotoUrl? cameraPhotoUrl:'',
+                 audio: audioUrl,
+                 receivid: activeSingleData.id,
+                 receivname: activeSingleData.name,
+                 date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`,
+            });
+        }else{
+            set(push(ref(db, 'groupChat')),{
+                sendid: data.uid,
+                sendname: data.displayName,
+                sendprofile: data.photoURL,
+                msg: chatInput,
+                img: inputPhotoUrl ? inputPhotoUrl:cameraPhotoUrl? cameraPhotoUrl:'',
+                audio: audioUrl,
+                gid: activeSingleData.gid,
+                date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`,
+           });
+           console.log("grp");
+        }
          setInputPhotoUrl('')
          setCamera(false)
          setCameraPhotoUrl('')
@@ -85,6 +100,16 @@ const Chatbox = () => {
             setChatList(arr);
         });
     },[activeSingleData.id])
+      useEffect(()=>{
+        const groupChatRef = ref(db, 'groupChat');
+        onValue(groupChatRef, (snapshot) => {
+           let arr = [];
+            snapshot.forEach((item)=>{
+                    arr.push(item.val()); 
+            });
+            setGmsgList(arr);
+        });
+    },[activeSingleData.id])
     const addAudioElement = (blob) => {
         const url = URL.createObjectURL(blob);
         const audioStorageRef = sref(storage, 'voice/' + url);
@@ -115,9 +140,10 @@ const Chatbox = () => {
                 <div  className={emojiModal?'h-[260px] overflow-y-scroll pr-6':'h-[560px] transition-all overflow-y-scroll pr-6'}>
                     {/* Recever message start */}
                     {
-                       chatList.map(item=>(
                         activeSingleData.status == "singlemsg" 
-                        ? activeSingleData.id == item.receivid 
+                        ?
+                        chatList.map(item=>(
+                            activeSingleData.id == item.receivid 
                         ? item.img
                         ?<div className='relative mr-2 my-1 ml-auto w-64'>
                         <ModalImage className='rounded max-w-[256px] ml-auto'
@@ -136,7 +162,7 @@ const Chatbox = () => {
                         :
                         <div className='relative mr-2 my-1 w-11/12 ml-auto'>
                         <p className='py-1 px-3 bg-secondary rounded-tl-md rounded-tr-md rounded-bl-md w-fit ml-auto  text-white'>{item.msg}</p>
-                        <BsFillTriangleFill className='absolute bottom-[17px] -right-2 text-secondary text-xl rotate-6'/>
+                        <BsFillTriangleFill className='absolute bottom-[17px] right-[-5px] text-secondary text-sm'/>
                         <p className='text-slate-400 text-end text-[12px] mr-2'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
                         : activeSingleData.id == item.sendid 
@@ -158,11 +184,100 @@ const Chatbox = () => {
                         :
                         <div className='relative ml-2 my-1 w-11/12'>
                         <p className='py-2 px-10 bg-slate-200 rounded-tl-md rounded-tr-md rounded-br-md w-fit'>{item.msg}</p>
-                        <BsFillTriangleFill className='absolute bottom-[17px] -left-2 text-slate-200 text-xl -rotate-6'/>
+                        <BsFillTriangleFill className='absolute bottom-[17px] -left-2 text-slate-200 text-sm'/>
                         <p className='text-slate-400 ml-2 text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
-                        :<h1>Grp msg</h1>
                        )) 
+                       :gmsgList.map((item)=>(
+                        data.uid == item.sendid ?
+                        item.gid == activeSingleData.gid &&
+                        <div>
+                           {item.img
+                        ?
+                        <div className='flex items-end gap-2 ml-auto'>
+                        <div className='relative mr-2 my-1 ml-auto w-64'>
+                            <p className='text-shadow'>{item.sendname}</p>
+                        <ModalImage className='rounded max-w-[256px] ml-auto'
+                            small={item.img}
+                            large={item.img}
+                            alt={"Hello "+data.displayName}
+                            imageBackgroundColor='#5F35F5'
+                            />
+                            <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                        </div>
+                        <div className='mr-4 w-[25px] h-[25px] rounded-full overflow-hidden mb-6'>
+                               <img className='w-full h-full' src={item.sendprofile}/>
+                            </div>
+                        </div>
+                        :item.audio
+                        ?<div className='flex items-end gap-2 ml-auto'>
+                        <div className='relative mr-2 my-6  ml-auto w-64'>
+                            <p className='text-shadow'>{item.sendname}</p>
+                        <audio controls className='w-full' src={item.audio}> </audio>
+                            <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                        </div>
+                        <div className='mr-4 w-[25px] h-[25px] rounded-full overflow-hidden mb-6'>
+                               <img className='w-full h-full' src={item.sendprofile}/>
+                            </div>
+                        </div>
+                        : <div className='flex items-end gap-2 ml-auto'>
+                           <div className='relative mr-2 my-1 w-11/12'>
+                              <p className='text-slate-400 text-end text-[12px] mr-2'>{item.sendname}</p>
+                               <p className='px-3 bg-secondary rounded-tl-md rounded-tr-md rounded-bl-md w-fit ml-auto  text-white'>{item.msg}</p>
+                               <BsFillTriangleFill className='absolute bottom-[17px] right-[-5px] text-secondary text-sm'/>
+                              <p className='text-slate-400 text-end text-[12px] mr-2'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            </div>
+                            <div className='mr-4 w-[25px] h-[25px] rounded-full overflow-hidden mb-6'>
+                               <img className='w-full h-full' src={item.sendprofile}/>
+                            </div>
+                          </div>
+                              
+                           }
+                        </div>
+                        :item.gid == activeSingleData.gid &&
+                        <div>
+                            {item.img
+                        ?<div className='flex items-end gap-1'>
+                             <div className='mr-4 w-[25px] h-[25px] rounded-full overflow-hidden mb-6'>
+                                <img className='w-full h-full' src={item.sendprofile}/>
+                             </div>
+                        <div className='ml-2 my-1 w-64'>
+                            <p className='text-shadow'>{item.sendname}</p>
+                        <ModalImage className='rounded max-w-[256px]'
+                        small={item.img}
+                        large={item.img}
+                        alt={"Hello "+data.displayName}
+                        imageBackgroundColor='#5F35F5'
+                        />
+                        <p className='text-shadow'>{item.date}</p>
+                        </div>
+                        </div>
+                        :item.audio
+                        ?<div className='flex items-end gap-1'>
+                            <div className='mr-4 w-[25px] h-[25px] rounded-full overflow-hidden mb-6'>
+                                <img className='w-full h-full' src={item.sendprofile}/>
+                             </div>
+                            <div className='ml-2 my-6 w-64'>
+                                <p className='text-shadow'>{item.sendname}</p>
+                                 <audio controls className='w-full' src={item.audio}> </audio>
+                                <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                          </div>
+                        </div>
+                        : <div className='flex items-end gap-1'>
+                            <div className='mr-4 w-[25px] h-[25px] rounded-full overflow-hidden mb-6'>
+                               <img className='w-full h-full' src={item.sendprofile}/>
+                            </div>
+                            <div className='relative my-1 w-11/12'>
+                            <p className='text-slate-400 ml-2 text-[12px]'>{item.sendname}</p>
+                            <p className='px-3 bg-slate-200 rounded-tl-md rounded-tr-md rounded-br-md w-fit'>{item.msg}</p>
+                            <BsFillTriangleFill className='absolute bottom-[17px] left-[-5px] text-slate-200 text-sm'/>
+                             <p className='text-slate-400 ml-2 text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            </div>
+                            
+                            </div>
+                            }
+                        </div>
+                       ))
                     }
                     {/* Recever image start */}
                     {/*  */}
