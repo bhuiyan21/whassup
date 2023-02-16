@@ -16,6 +16,7 @@ import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL,uploadByt
 import { AudioRecorder } from 'react-audio-voice-recorder';
 import moment from 'moment';
 import EmojiPicker from 'emoji-picker-react';
+import ScrollToBottom from 'react-scroll-to-bottom';
 const Chatbox = () => {
     const storage = getStorage();
     const db = getDatabase();
@@ -137,7 +138,7 @@ const Chatbox = () => {
                     </div>
                 </div>
                 {/* Recever profile end */}
-                <div  className={emojiModal?'h-[260px] overflow-y-scroll pr-6':'h-[560px] transition-all overflow-y-scroll pr-6'}>
+                <ScrollToBottom   className={emojiModal?'h-[260px] pr-6':'h-[560px] transition-all pr-6'}>
                     {/* Recever message start */}
                     {
                         activeSingleData.status == "singlemsg" 
@@ -152,12 +153,12 @@ const Chatbox = () => {
                             alt={"Hello "+data.displayName}
                             imageBackgroundColor='#5F35F5'
                             />
-                            <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
                         :item.audio
                         ?<div className='relative mr-2 my-6  ml-auto w-64'>
                         <audio controls className='w-full' src={item.audio}> </audio>
-                            <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
                         :
                         <div className='relative mr-2 my-1 w-11/12 ml-auto'>
@@ -174,12 +175,12 @@ const Chatbox = () => {
                         alt={"Hello "+data.displayName}
                         imageBackgroundColor='#5F35F5'
                         />
-                        <p className='text-shadow'>{item.date}</p>
+                        <p className='text-slate-400 text-end text-[12px]'>{item.date}</p>
                         </div>
                         :item.audio
                         ?<div className='ml-2 my-6 w-64'>
                         <audio controls className='w-full' src={item.audio}> </audio>
-                            <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
                         :
                         <div className='relative ml-2 my-1 w-11/12'>
@@ -196,14 +197,14 @@ const Chatbox = () => {
                         ?
                         <div className='flex items-end gap-2 ml-auto'>
                         <div className='relative mr-2 my-1 ml-auto w-64'>
-                            <p className='text-shadow'>{item.sendname}</p>
+                            <p className='text-slate-400 text-end text-[12px]'>{item.sendname}</p>
                         <ModalImage className='rounded max-w-[256px] ml-auto'
                             small={item.img}
                             large={item.img}
                             alt={"Hello "+data.displayName}
                             imageBackgroundColor='#5F35F5'
                             />
-                            <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
                         <div className='mr-4 w-[25px] h-[25px] rounded-full overflow-hidden mb-6'>
                                <img className='w-full h-full' src={item.sendprofile}/>
@@ -212,16 +213,16 @@ const Chatbox = () => {
                         :item.audio
                         ?<div className='flex items-end gap-2 ml-auto'>
                         <div className='relative mr-2 my-6  ml-auto w-64'>
-                            <p className='text-shadow'>{item.sendname}</p>
+                            <p className='text-slate-400 text-end text-[12px]'>{item.sendname}</p>
                         <audio controls className='w-full' src={item.audio}> </audio>
-                            <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
                         <div className='mr-4 w-[25px] h-[25px] rounded-full overflow-hidden mb-6'>
                                <img className='w-full h-full' src={item.sendprofile}/>
                             </div>
                         </div>
-                        : <div className='flex items-end gap-2 ml-auto'>
-                           <div className='relative mr-2 my-1 w-11/12'>
+                        : <div className='flex items-end gap-2 '>
+                           <div className='relative mr-2 my-1 w-4/5 ml-auto'>
                               <p className='text-slate-400 text-end text-[12px] mr-2'>{item.sendname}</p>
                                <p className='px-3 bg-secondary rounded-tl-md rounded-tr-md rounded-bl-md w-fit ml-auto  text-white'>{item.msg}</p>
                                <BsFillTriangleFill className='absolute bottom-[17px] right-[-5px] text-secondary text-sm'/>
@@ -242,14 +243,14 @@ const Chatbox = () => {
                                 <img className='w-full h-full' src={item.sendprofile}/>
                              </div>
                         <div className='ml-2 my-1 w-64'>
-                            <p className='text-shadow'>{item.sendname}</p>
+                            <p className='text-slate-400  text-[12px]'>{item.sendname}</p>
                         <ModalImage className='rounded max-w-[256px]'
                         small={item.img}
                         large={item.img}
                         alt={"Hello "+data.displayName}
                         imageBackgroundColor='#5F35F5'
                         />
-                        <p className='text-shadow'>{item.date}</p>
+                        <p className='text-slate-400  text-[12px]'>{item.date}</p>
                         </div>
                         </div>
                         :item.audio
@@ -258,20 +259,20 @@ const Chatbox = () => {
                                 <img className='w-full h-full' src={item.sendprofile}/>
                              </div>
                             <div className='ml-2 my-6 w-64'>
-                                <p className='text-shadow'>{item.sendname}</p>
+                                <p className='text-slate-400 text-end text-[12px]'>{item.sendname}</p>
                                  <audio controls className='w-full' src={item.audio}> </audio>
-                                <p className='text-shadow'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                                <p className='text-slate-400  text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                           </div>
                         </div>
-                        : <div className='flex items-end gap-1'>
+                        : <div className='flex items-end gap-1 w-11/12'>
                             <div className='mr-4 w-[25px] h-[25px] rounded-full overflow-hidden mb-6'>
                                <img className='w-full h-full' src={item.sendprofile}/>
                             </div>
                             <div className='relative my-1 w-11/12'>
-                            <p className='text-slate-400 ml-2 text-[12px]'>{item.sendname}</p>
+                            <p className='text-slate-400  text-[12px]'>{item.sendname}</p>
                             <p className='px-3 bg-slate-200 rounded-tl-md rounded-tr-md rounded-br-md w-fit'>{item.msg}</p>
                             <BsFillTriangleFill className='absolute bottom-[17px] left-[-5px] text-slate-200 text-sm'/>
-                             <p className='text-slate-400 ml-2 text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                             <p className='text-slate-400 text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                             </div>
                             
                             </div>
@@ -279,41 +280,9 @@ const Chatbox = () => {
                         </div>
                        ))
                     }
-                    {/* Recever image start */}
-                    {/*  */}
-                    {/* Recever image end */}
-                    {/* Sender image start */}
-                    {/*  */}
-                    {/* Sender image end */}
-
-                    {/* Recever audio start */}
-                    {/* <div className='ml-2 my-6 w-64'>
-                    <audio controls className='w-full'> </audio>
-                        <p className='text-shadow'>Today, 2:13pm</p>
-                    </div> */}
-                    {/* Recever audio end */}
-                    {/* Sender audio start */}
-                    {/* <div className='relative mr-2 my-6  ml-auto w-64'>
-                    <audio controls className='w-full'> </audio>
-                        <p className='text-shadow'>Today, 2:13pm</p>
-                    </div> */}
-                    {/* Sender audio end */}
-
-                    {/* Recever video start */}
-                    {/* <div className='ml-2 my-6 w-64'>
-                    <video width="320" height="240" className='rounded-md' controls></video>
-                        <p className='text-shadow'>Today, 2:13pm</p>
-                    </div> */}
-                    {/* Recever video end */}
-                    {/* Sender video start */}
-                    {/* <div className='relative mr-2 my-6  ml-auto w-64'>
-                    <video width="320" height="240" className='rounded-md' controls></video>
-                        <p className='text-shadow'>Today, 2:13pm</p>
-                    </div> */}
-                    {/* Sender video end */}
-                </div>
+                </ScrollToBottom>
             </div>
-        <div className=''>
+        <div >
             <div>
               <div className='border-t-2 pt-2 mt-1 flex items-center gap-2'>
                 <div className='bg-slate-200 py-1 rounded-md px-4 w-full relative'>
