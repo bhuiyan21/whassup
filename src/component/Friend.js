@@ -93,6 +93,9 @@ const Friend = ({active}) => {
         localStorage.setItem("activeSingle", JSON.stringify({status: "singlemsg", name: item.senderName, email: item.senderemail, id: item.senderId, profile: item.senderprofile,}))
       }
     }
+    let handelSendMsg =()=>{
+      
+    }
   return (
     <div className='pt-5 pb-5 pl-5 mt-6 rounded-lg relative bg-white shadow-md'>
         <div className='flex justify-between pr-8 items-center'>
@@ -133,9 +136,10 @@ const Friend = ({active}) => {
                       <p className='font-medium font-poppins text-xs text-shadow'>{item.receiveremail}</p>
                   </div>
                   <div className='mt-2 ml-auto'>
-                    <p className='font-poppins font-medium text-xs text-shadow'>Today, 8:56pm</p>
+                    <p className='font-poppins font-medium text-xs text-shadow'>Today,fgasdf 8:56pm</p>
                   </div>
                 </div>
+                 
                   : <div className='flex py-4 border-b-2'>
                   <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                     <img className='w-full h-full' src={item.receiverprofile}/>
@@ -173,7 +177,7 @@ const Friend = ({active}) => {
                       <p className='font-medium font-poppins text-xs text-shadow'>{item.senderemail}</p>
                   </div>
                       <div className='mt-2 ml-auto'>
-                        <p className='font-poppins font-medium text-xs text-shadow'>Today, 8:56pm</p>
+                        <p className='font-poppins font-medium text-xs text-shadow'>Today,fgsdf 8:56pm</p>
                       </div>
                   </div>
                   :
@@ -225,6 +229,20 @@ const Friend = ({active}) => {
                       </div>
                     </div>
                       :
+                      active == "forword"
+                      ?<div onClick={()=>handelSendMsg(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
+                      <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
+                        <img className='w-full h-full' src={item.receiverprofile}/>
+                      </div>
+                      <div>
+                          <h2 className='font-semibold font-poppins text-sm mt-2'>{item.receiverName}</h2>
+                          <p className='font-medium font-poppins text-xs text-shadow'>{item.receiveremail}</p>
+                      </div>
+                      <div className='mt-2 ml-auto'>
+                        <p className='font-poppins font-medium text-xs text-shadow'>Today</p>
+                      </div>
+                    </div>
+                      :
                        <div className='flex py-4 border-b-2'>
                       <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                         <img className='w-full h-full' src={item.receiverprofile}/>
@@ -268,7 +286,23 @@ const Friend = ({active}) => {
                         <p className='font-poppins font-medium text-xs text-shadow'>Today, 8:56pm</p>
                       </div>
                   </div>
-                      :<div className='flex py-4 border-b-2'>
+                      :
+                      active == "forword"
+                      ?<div onClick={()=>handelSendMsg(item)} className='flex py-4 border-b-2 items-center cursor-pointer'>
+                      <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
+                        <img className='w-full h-full' src={item.senderprofile}/>
+                      </div>
+                      <div>
+                          <h2 className='font-semibold font-poppins text-sm mt-2'>{item.senderName}</h2>
+                          <p className='font-medium font-poppins text-xs text-shadow'>{item.senderemail}</p>
+                      </div>
+                            
+                      <div className='mt-2 ml-auto'>
+                        <p className='font-poppins font-medium text-xs text-shadow'>Today,</p>
+                      </div>
+                  </div>
+                      :
+                      <div className='flex py-4 border-b-2'>
                           <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
                             <img className='w-full h-full' src={item.senderprofile}/>
                           </div>

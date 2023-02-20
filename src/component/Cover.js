@@ -12,7 +12,7 @@ const Cover = () => {
   const db = getDatabase()
     const storage = getStorage();
     const auth = getAuth();
-    const [coverUrl, setCoverUrl] = useState("");
+    const [coverUrl, setCoverUrl] = useState([]);
     const [covermodal, setCovermodal] = useState(false);
     const [coverpreview, setCoverpreview] = useState(false);
     const [coverMainmodal, setCoverMainmodal] = useState(false);
@@ -46,8 +46,12 @@ const Cover = () => {
           const storageRef = ref(storage,'cover/' + coverimg );
           const message4 = cropper.getCroppedCanvas().toDataURL();
           uploadString(storageRef, message4, 'data_url').then((snapshot) => {
+           
             getDownloadURL(storageRef).then((downloadURL) => {
-                setCoverUrl(downloadURL)
+                set(sref(db, 'coverImg/'), {
+                  cover : downloadURL,
+                  userid: data.uid,
+                })
           }).then(()=>{
             setImage('')
             setCoverMainmodal(!coverMainmodal)
@@ -68,6 +72,19 @@ let handelModalCancel =()=>{
     setCoverMainmodal(!coverMainmodal)
     setCoverpreview(!coverpreview)
 }
+useEffect(()=>{
+  const coverRef = sref(db, 'coverImg');
+  onValue(coverRef, (snapshot) => {
+     let arr = [];
+      snapshot.forEach((item)=>{
+          if(data.uid == item.val().userid){
+              arr.push(item.val()); 
+          }
+      });
+      setCoverUrl(arr)
+  });
+},[])
+console.log("coverUrl",coverUrl);
   return (
     <div className='w-full h-56 bg-red-500 rounded-bl-md rounded-br-md'>
         {coverpreview
@@ -75,7 +92,11 @@ let handelModalCancel =()=>{
             <div className="img-preview w-full h-[300px]"></div>
         </div>
         :
-            <img className='w-full h-full rounded' src={coverUrl}/>
+        coverUrl.map((item)=>{
+          console.log("item",item);
+        }
+          // <img className='w-full h-full rounded' src={item.cover}/>
+          )
         }        
              <div onClick={handelCoverUpload}  className='absolute bottom-3 right-3 py-2 px-3 bg-white rounded-md flex items-center gap-2 cursor-pointer overflow-hidden'>
                 <AiFillCamera className='text-xl text-shadow'/>

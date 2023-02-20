@@ -88,7 +88,7 @@ const Home = () => {
     onValue(postRef, (snapshot) => {
        let arr = [];
        snapshot.forEach((item)=>{
-            arr.push({...item.val() , key: item.key})
+            arr.unshift({...item.val() , key: item.key})
         });
         setPost(arr)
     });

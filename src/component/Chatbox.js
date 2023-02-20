@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { BsFillTriangleFill} from 'react-icons/bs';
+import React, { useEffect, useReducer, useState } from 'react'
+import { BsFillTriangleFill,BsThreeDotsVertical} from 'react-icons/bs';
 import { CgSmileMouthOpen} from 'react-icons/cg';
-import { MdOutlineKeyboardVoice} from 'react-icons/md';
 import { AiOutlineCamera, AiFillDelete} from 'react-icons/ai';
 import { TfiGallery} from 'react-icons/tfi';
 import { FiSend} from 'react-icons/fi';
@@ -17,7 +16,22 @@ import { AudioRecorder } from 'react-audio-voice-recorder';
 import moment from 'moment';
 import EmojiPicker from 'emoji-picker-react';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import Friend from './Friend';
+
+let initialState ={
+    sendAudioOption: false,
+    sendImgOption: false,
+    sendMsgOption: false,
+}
+function reducer(state, action){
+   switch(action.type){
+        case action.type: return{ sendAudioOption: state.sendAudioOption = true, sendAudio: action.type};
+        case action.type: return{ sendImgOption: state.sendImgOption = true, sendImg: action.type};
+        case action.type: return{sendMsgOption: state.sendMsgOption = true , sendMsg: action.type};
+   }
+}
 const Chatbox = () => {
+    let [state, dispatch] = useReducer(reducer, initialState);
     const storage = getStorage();
     const db = getDatabase();
     const activeSingleData = useSelector(state=> state.activeChat.active)
@@ -95,7 +109,7 @@ const Chatbox = () => {
             snapshot.forEach((item)=>{
                 if((data.uid == item.val().sendid && item.val().receivid == activeSingleData.id) 
                 || data.uid == item.val().receivid && item.val().sendid == activeSingleData.id){
-                    arr.push(item.val()); 
+                    arr.push({...item.val(), key: item.key}); 
                 }
             });
             setChatList(arr);
@@ -124,6 +138,13 @@ const Chatbox = () => {
       let handelEmoji=(e)=>{
         setChatInput(chatInput + e.emoji);
       }
+      let handelRemove=(item)=>{
+          console.log(item);
+          remove(ref(db, 'singleChat/'+item.key))
+      }
+      let handelForword =(item)=>{
+           console.log(item);
+      }
   return (
     <div className='p-3 mt-6 rounded-lg relative bg-white shadow-md'>
          <div>
@@ -146,25 +167,52 @@ const Chatbox = () => {
                         chatList.map(item=>(
                             activeSingleData.id == item.receivid 
                         ? item.img
-                        ?<div className='relative mr-2 my-1 ml-auto w-64'>
-                        <ModalImage className='rounded max-w-[256px] ml-auto'
-                            small={item.img}
-                            large={item.img}
-                            alt={"Hello "+data.displayName}
-                            imageBackgroundColor='#5F35F5'
-                            />
-                            <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                        ?<div className=' mr-2 my-4  flex items-center justify-end gap-2 group'>
+                            <BsThreeDotsVertical onClick={()=>dispatch({type: item.key})} className='text-shadow hidden group-hover:block cursor-pointer mb-3'/>
+                            <div className='w-64 relative'>
+                                <ModalImage className='rounded max-w-[256px] ml-auto'
+                                small={item.img}
+                                large={item.img}
+                                alt={"Hello "+data.displayName}
+                                imageBackgroundColor='#5F35F5'
+                                />
+                                <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                                {
+                                   (state.sendImg == item.key) && state.sendImgOption&& <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
+                                    <p onClick={()=>handelRemove(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Remove</p>
+                                    <p className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
+                                    </div>
+                                }
+                            </div>
                         </div>
                         :item.audio
-                        ?<div className='relative mr-2 my-6  ml-auto w-64'>
-                        <audio controls className='w-full' src={item.audio}> </audio>
+                        ?<div className=' mr-2 my-4  flex items-center justify-end gap-2 group'>
+                            <BsThreeDotsVertical onClick={()=>dispatch({type: item.key})} className='text-shadow hidden group-hover:block cursor-pointer mb-3'/>
+                            <div className='w-64 relative'>
+                            <audio controls className='w-full' src={item.audio}> </audio>
                             <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            {
+                                 (state.sendAudio == item.key) && state.sendAudioOption && <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
+                                    <p onClick={()=>handelRemove(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Remove</p>
+                                    <p onClick={()=>handelForword(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
+                                    </div>
+                                }
+                            </div>
                         </div>
                         :
-                        <div className='relative mr-2 my-1 w-11/12 ml-auto'>
-                        <p className='py-1 px-3 bg-secondary rounded-tl-md rounded-tr-md rounded-bl-md w-fit ml-auto  text-white'>{item.msg}</p>
-                        <BsFillTriangleFill className='absolute bottom-[17px] right-[-5px] text-secondary text-sm'/>
-                        <p className='text-slate-400 text-end text-[12px] mr-2'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                        <div className=' mr-2 my-4 flex  items-center justify-end gap-2 group'>
+                            <BsThreeDotsVertical onClick={()=>dispatch({type: item.key})} className='text-shadow hidden group-hover:block cursor-pointer mb-3'/>
+                            <div className='relative max-w-[80%]'>
+                                <p className='py-1 px-3 bg-secondary rounded-tl-md rounded-tr-md rounded-bl-md w-fit ml-auto  text-white'>{item.msg}</p>
+                                <BsFillTriangleFill className='absolute bottom-[17px] right-[-5px] text-secondary text-sm'/>
+                                <p className='text-slate-400 text-end text-[12px] mr-2'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                                {
+                                  (state.sendMsg == item.key) && state.sendMsgOption && <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
+                                    <p onClick={()=>handelRemove(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Remove</p>
+                                    <p className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
+                                    </div>
+                                }
+                            </div>
                         </div>
                         : activeSingleData.id == item.sendid 
                         && item.img
@@ -232,7 +280,6 @@ const Chatbox = () => {
                                <img className='w-full h-full' src={item.sendprofile}/>
                             </div>
                           </div>
-                              
                            }
                         </div>
                         :item.gid == activeSingleData.gid &&
@@ -363,6 +410,9 @@ const Chatbox = () => {
                 && <EmojiPicker onEmojiClick={handelEmoji}/>
               }
             </div> 
+                {/* <div className='w-full h-full bg-slate-800 absolute top-0 left-0'>
+                   <Friend active="forword"/>
+                </div> */}
         </div>
     </div>
   )

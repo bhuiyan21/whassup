@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BiDotsVerticalRounded} from 'react-icons/bi';
-import { HiOutlineInformationCircle} from 'react-icons/hi';
 import { FcSearch} from 'react-icons/fc';
-import { GiCrossMark} from 'react-icons/gi';
-import { AiTwotoneDelete, AiOutlineUsergroupAdd} from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDatabase, ref, onValue, set,push , remove} from "firebase/database";
 import { activeChat } from '../slices/userInfo/activeChatSlice';

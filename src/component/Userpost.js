@@ -59,7 +59,7 @@ const Userpost = () => {
          let arr = [];
          snapshot.forEach((item)=>{
             if(data.uid == item.val().userid){
-              arr.push({...item.val() , key: item.key})
+              arr.unshift({...item.val() , key: item.key})
             }
           });
           setPost(arr)

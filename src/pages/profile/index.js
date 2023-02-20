@@ -6,6 +6,7 @@ import Cropper from "react-cropper";
 import { FaUserEdit} from 'react-icons/fa';
 import "cropperjs/dist/cropper.css";
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
+import { getDatabase, ref as sref, onValue, set,push} from "firebase/database";
 import { getAuth, signOut, updateProfile } from "firebase/auth";
 import { BiCrop, BiDotsVerticalRounded} from 'react-icons/bi';
 import { AiFillCamera} from 'react-icons/ai';
@@ -16,6 +17,7 @@ import Userpost from '../../component/Userpost';
 const Profile = ({active}) => {
     const storage = getStorage();
     const auth = getAuth();
+    const db = getDatabase();
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
     let [uploadModal, setUploadModal] = useState(false);
     let [loader, setLoader] = useState(false);
@@ -62,9 +64,15 @@ const Profile = ({active}) => {
       const message4 = cropper.getCroppedCanvas().toDataURL();
       uploadString(storageRef, message4, 'data_url').then((snapshot) => {
         getDownloadURL(storageRef).then((downloadURL) => {
+          set(sref(db, 'users/' + data.uid), {
+            username: data.displayName,
+            email: data.email,
+            profile_picture : downloadURL,
+          })
         updateProfile(auth.currentUser, {
           photoURL: downloadURL,
         }).then(()=>{
+          
           uploadModal && setUploadModal(false);
            setImage("");
            setCropData("");
