@@ -3,9 +3,13 @@ import { FcSearch} from 'react-icons/fc';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
 import { useDispatch, useSelector} from 'react-redux';
 import { activeChat } from '../slices/userInfo/activeChatSlice';
+
 const Friend = ({active}) => {
   let [chat, setChat] = useState('')
+  const activeSingleData = useSelector(state=> state.activeChat.active)
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
+    let forwordItem = useSelector((state)=>state.forwordItem.forwordItem)
+    console.log("forwordItem",forwordItem);
     const db = getDatabase();
     const dispatch = useDispatch();
     let [accept, setAccept] = useState([])
@@ -93,11 +97,37 @@ const Friend = ({active}) => {
         localStorage.setItem("activeSingle", JSON.stringify({status: "singlemsg", name: item.senderName, email: item.senderemail, id: item.senderId, profile: item.senderprofile,}))
       }
     }
-    let handelSendMsg =()=>{
-      
-    }
+    let handelSendMsg =(item)=>{
+        console.log("handelSendMsg",item);
+        if(data.uid == item.receiverId){
+          set(push(ref(db, 'singleChat')),{
+            sendid: data.uid,
+            sendname: data.displayName,
+            msg: forwordItem.msg,
+            img: forwordItem.img ? forwordItem.img:'',
+            audio: forwordItem.audio,
+            receivid: item.senderId,
+            receivname: item.senderName,
+            date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`,
+            forword: "Forword message"
+           });
+        }else{
+          set(push(ref(db, 'singleChat')),{
+            sendid: data.uid,
+            sendname: data.displayName,
+            msg: forwordItem.msg,
+            img: forwordItem.img ? forwordItem.img:'',
+            audio: forwordItem.audio,
+            receivid: item.receiverId,
+            receivname: item.receiverName,
+            date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`,
+            forword: "Forword message"
+           });
+        }
+            
+      }
   return (
-    <div className='pt-5 pb-5 pl-5 mt-6 rounded-lg relative bg-white shadow-md'>
+    <div className='pt-5 pb-5 pl-5 rounded-lg relative bg-white shadow-md z-30'>
         <div className='flex justify-between pr-8 items-center'>
           {
            active == "chatpage"

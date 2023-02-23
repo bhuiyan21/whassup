@@ -17,7 +17,7 @@ import moment from 'moment';
 import EmojiPicker from 'emoji-picker-react';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import Friend from './Friend';
-
+import { forword } from '../slices/userInfo/forwordSlice';
 let initialState ={
     sendAudioOption: false,
     sendImgOption: false,
@@ -31,6 +31,7 @@ function reducer(state, action){
    }
 }
 const Chatbox = () => {
+    const dispatches = useDispatch()
     let [state, dispatch] = useReducer(reducer, initialState);
     const storage = getStorage();
     const db = getDatabase();
@@ -38,6 +39,7 @@ const Chatbox = () => {
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
     let [camera, setCamera] =useState(false)
     let [emojiModal, setEmojiModal] =useState(false)
+    let [forwordModal, setForwordModal] =useState(false)
     let [cameraPhotoUrl, setCameraPhotoUrl] =useState('')
     let [inputPhotoUrl, setInputPhotoUrl] =useState('')
     let [audioUrl, setAudioUrl] =useState('')
@@ -143,10 +145,12 @@ const Chatbox = () => {
           remove(ref(db, 'singleChat/'+item.key))
       }
       let handelForword =(item)=>{
-           console.log(item);
+        console.log(item);
+        setForwordModal(!forwordModal)
+           dispatches(forword(item))
       }
   return (
-    <div className='p-3 mt-6 rounded-lg relative bg-white shadow-md'>
+    <div className='p-3 rounded-lg relative bg-white shadow-md'>
          <div>
                 {/* Recever profile start */}
                 <div className='flex p-2 border-b-2 bg-slate-100 mb-1 rounded-md'>
@@ -170,17 +174,18 @@ const Chatbox = () => {
                         ?<div className=' mr-2 my-4  flex items-center justify-end gap-2 group'>
                             <BsThreeDotsVertical onClick={()=>dispatch({type: item.key})} className='text-shadow hidden group-hover:block cursor-pointer mb-3'/>
                             <div className='w-64 relative'>
+                            <p className='text-slate-400 text-start text-[12px] italic'>{item.forword}</p>
                                 <ModalImage className='rounded max-w-[256px] ml-auto'
                                 small={item.img}
                                 large={item.img}
-                                alt={"Hello "+data.displayName}
+                                alt={"WhaSsup "+data.displayName+" ?"}
                                 imageBackgroundColor='#5F35F5'
                                 />
                                 <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                                 {
                                    (state.sendImg == item.key) && state.sendImgOption&& <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
                                     <p onClick={()=>handelRemove(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Remove</p>
-                                    <p className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
+                                    <p onClick={()=>handelForword(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
                                     </div>
                                 }
                             </div>
@@ -189,6 +194,7 @@ const Chatbox = () => {
                         ?<div className=' mr-2 my-4  flex items-center justify-end gap-2 group'>
                             <BsThreeDotsVertical onClick={()=>dispatch({type: item.key})} className='text-shadow hidden group-hover:block cursor-pointer mb-3'/>
                             <div className='w-64 relative'>
+                                <p className='text-slate-400 text-start text-[12px] italic'>{item.forword}</p>
                             <audio controls className='w-full' src={item.audio}> </audio>
                             <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                             {
@@ -203,13 +209,14 @@ const Chatbox = () => {
                         <div className=' mr-2 my-4 flex  items-center justify-end gap-2 group'>
                             <BsThreeDotsVertical onClick={()=>dispatch({type: item.key})} className='text-shadow hidden group-hover:block cursor-pointer mb-3'/>
                             <div className='relative max-w-[80%]'>
+                            <p className='text-slate-400 text-start text-[12px] italic'>{item.forword}</p>
                                 <p className='py-1 px-3 bg-secondary rounded-tl-md rounded-tr-md rounded-bl-md w-fit ml-auto  text-white'>{item.msg}</p>
                                 <BsFillTriangleFill className='absolute bottom-[17px] right-[-5px] text-secondary text-sm'/>
                                 <p className='text-slate-400 text-end text-[12px] mr-2'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                                 {
                                   (state.sendMsg == item.key) && state.sendMsgOption && <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
                                     <p onClick={()=>handelRemove(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Remove</p>
-                                    <p className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
+                                    <p onClick={()=>handelForword(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
                                     </div>
                                 }
                             </div>
@@ -217,21 +224,24 @@ const Chatbox = () => {
                         : activeSingleData.id == item.sendid 
                         && item.img
                         ?<div className='ml-2 my-1 w-64'>
+                        <p className='text-slate-400 text-start text-[12px] italic'>{item.forword}</p>
                         <ModalImage className='rounded max-w-[256px]'
                         small={item.img}
                         large={item.img}
-                        alt={"Hello "+data.displayName}
+                        alt={"WhaSsup "+data.displayName+" ?"}
                         imageBackgroundColor='#5F35F5'
                         />
                         <p className='text-slate-400 text-end text-[12px]'>{item.date}</p>
                         </div>
                         :item.audio
                         ?<div className='ml-2 my-6 w-64'>
+                        <p className='text-slate-400 text-start text-[12px] italic'>{item.forword}</p>
                         <audio controls className='w-full' src={item.audio}> </audio>
                             <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                         </div>
                         :
                         <div className='relative ml-2 my-1 w-11/12'>
+                            <p className='text-slate-400 text-start text-[12px] italic'>{item.forword}</p>
                         <p className='py-2 px-10 bg-slate-200 rounded-tl-md rounded-tr-md rounded-br-md w-fit'>{item.msg}</p>
                         <BsFillTriangleFill className='absolute bottom-[17px] -left-2 text-slate-200 text-sm'/>
                         <p className='text-slate-400 ml-2 text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
@@ -249,7 +259,7 @@ const Chatbox = () => {
                         <ModalImage className='rounded max-w-[256px] ml-auto'
                             small={item.img}
                             large={item.img}
-                            alt={"Hello "+data.displayName}
+                            alt={"WhaSsup "+data.displayName+" ?"}
                             imageBackgroundColor='#5F35F5'
                             />
                             <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
@@ -294,7 +304,7 @@ const Chatbox = () => {
                         <ModalImage className='rounded max-w-[256px]'
                         small={item.img}
                         large={item.img}
-                        alt={"Hello "+data.displayName}
+                        alt={"WhaSsup "+data.displayName +" ?"}
                         imageBackgroundColor='#5F35F5'
                         />
                         <p className='text-slate-400  text-[12px]'>{item.date}</p>
@@ -410,9 +420,20 @@ const Chatbox = () => {
                 && <EmojiPicker onEmojiClick={handelEmoji}/>
               }
             </div> 
-                {/* <div className='w-full h-full bg-slate-800 absolute top-0 left-0'>
+            {
+                forwordModal&&
+                <div className='w-full h-full bg-white pt-2 absolute top-0 left-0'>
+                    <div className='border-b flex justify-between items-center px-2'>
+                        <p className='font-semibold font-poppins text-xl'>Forword</p>
+                        <div onClick={()=>setForwordModal(!forwordModal)} className='flex gap-2 items-center cursor-pointer'>
+                          <p className='font-semibold font-poppins text-sm '>Close</p>
+                          <GiCrossMark className=' text-sm'/>
+                        </div>
+                    </div>
                    <Friend active="forword"/>
-                </div> */}
+               </div>
+            }
+                
         </div>
     </div>
   )
