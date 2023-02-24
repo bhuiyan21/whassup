@@ -26,13 +26,11 @@ const Home = () => {
   onAuthStateChanged(auth, (user)=>{
     dispatch(userLoginInfo(user))
     localStorage.setItem("userInfo", JSON.stringify(user))
+    if(user.emailVerified){
+      setVerify(true)
+     }
   })
 
-  useEffect(()=>{
-       if(data.emailVerified){
-        setVerify(true)
-       }
-  },[])
   useEffect(()=>{
      if(!data){
       navigate("/login")
