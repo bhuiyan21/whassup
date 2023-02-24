@@ -19,15 +19,13 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import Friend from './Friend';
 import { forword } from '../slices/userInfo/forwordSlice';
 let initialState ={
-    sendAudioOption: false,
-    sendImgOption: false,
-    sendMsgOption: false,
+    dotModal: false,
 }
 function reducer(state, action){
    switch(action.type){
-        case action.type: return{ sendAudioOption: state.sendAudioOption = true, sendAudio: action.type};
-        case action.type: return{ sendImgOption: state.sendImgOption = true, sendImg: action.type};
-        case action.type: return{sendMsgOption: state.sendMsgOption = true , sendMsg: action.type};
+        case action.type: return{ dotModal: state.dotModal = true, modalKey: action.type};
+        case action.type: return{ dotModal: state.dotModal = true, modalKey: action.type};
+        case action.type: return{dotModal: state.dotModal = true , modalKey: action.type};
    }
 }
 const Chatbox = () => {
@@ -53,7 +51,7 @@ const Chatbox = () => {
         setCamera(false)
         setCameraPhotoUrl('')
       }
-      let handelSendMsg =()=>{
+      let handelmodalKey =()=>{
         if(activeSingleData.status == "singlemsg" ){
             set(push(ref(db, 'singleChat')),{
                  sendid: data.uid,
@@ -141,11 +139,9 @@ const Chatbox = () => {
         setChatInput(chatInput + e.emoji);
       }
       let handelRemove=(item)=>{
-          console.log(item);
           remove(ref(db, 'singleChat/'+item.key))
       }
       let handelForword =(item)=>{
-        console.log(item);
         setForwordModal(!forwordModal)
            dispatches(forword(item))
       }
@@ -183,7 +179,7 @@ const Chatbox = () => {
                                 />
                                 <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                                 {
-                                   (state.sendImg == item.key) && state.sendImgOption&& <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
+                                   (state.modalKey == item.key) && state.dotModal&& <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
                                     <p onClick={()=>handelRemove(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Remove</p>
                                     <p onClick={()=>handelForword(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
                                     </div>
@@ -198,7 +194,7 @@ const Chatbox = () => {
                             <audio controls className='w-full' src={item.audio}> </audio>
                             <p className='text-slate-400 text-end text-[12px]'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                             {
-                                 (state.sendAudio == item.key) && state.sendAudioOption && <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
+                                 (state.modalKey == item.key) && state.dotModal && <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
                                     <p onClick={()=>handelRemove(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Remove</p>
                                     <p onClick={()=>handelForword(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
                                     </div>
@@ -214,7 +210,7 @@ const Chatbox = () => {
                                 <BsFillTriangleFill className='absolute bottom-[17px] right-[-5px] text-secondary text-sm'/>
                                 <p className='text-slate-400 text-end text-[12px] mr-2'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                                 {
-                                  (state.sendMsg == item.key) && state.sendMsgOption && <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
+                                  (state.modalKey == item.key) && state.dotModal && <div className='absolute top-1/2 -translate-y-1/2 right-full bg-white shadow-xl p-2 w-28 mr-2 z-20'>
                                     <p onClick={()=>handelRemove(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Remove</p>
                                     <p onClick={()=>handelForword(item)} className='cursor-pointer hover:bg-slate-100 py-2 pl-3 rounded-lg'>Forword</p>
                                     </div>
@@ -411,7 +407,7 @@ const Chatbox = () => {
                 {
                inputPhotoUrl !== '' || chatInput !== '' || cameraPhotoUrl || audioUrl
                 ?
-               <button onClick={handelSendMsg} className='text-2xl text-white p-2 bg-secondary rounded-md'><FiSend/></button>
+               <button onClick={handelmodalKey} className='text-2xl text-white p-2 bg-secondary rounded-md'><FiSend/></button>
                :''
                }
               </div>
