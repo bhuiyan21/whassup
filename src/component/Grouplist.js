@@ -56,7 +56,6 @@ const Grouplist = () => {
         });
     },[]);
     let handelJoin = (item)=>{
-        console.log("groupJoinReq",item);
         set(push(ref(db, 'groupJoinReq')), {
             groupAdminId: item.groupAdminId,
             groupAdminName: item.groupAdminName,

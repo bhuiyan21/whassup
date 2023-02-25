@@ -3,15 +3,14 @@ import { AiOutlineHome, AiOutlineMessage, AiOutlineSetting,AiOutlineCloudUpload,
 import { IoIosNotificationsOutline} from 'react-icons/io';
 import { TbHandClick} from 'react-icons/tb';
 import { MdGroups} from 'react-icons/md';
-import { FaSearch, FaUserFriends} from 'react-icons/fa';
+import {  FaUserFriends} from 'react-icons/fa';
 import { ImExit} from 'react-icons/im';
-import { getAuth, signOut, updateProfile } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { Link, useNavigate} from "react-router-dom";
 import { useDispatch, useSelector} from 'react-redux';
 import { userLoginInfo } from '../slices/userInfo/userSlice';
 import Searchbar from './Searchbar';
 const Sidebar = ({active}) => {
-  console.log(active);
   let [logoutModal, setLogoutModal] = useState(false);
   let [profileModal, setProfileModalModal] = useState(false);
   const auth = getAuth();

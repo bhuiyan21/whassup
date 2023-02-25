@@ -5,7 +5,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Dna } from  'react-loader-spinner'
 import { Link, useNavigate} from "react-router-dom";
 import { getDatabase, ref, set } from "firebase/database";
-import { useDispatch } from 'react-redux';
 const Registration = () => {
   const db = getDatabase();
     const auth = getAuth();

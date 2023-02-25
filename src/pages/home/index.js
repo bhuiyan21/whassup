@@ -3,13 +3,12 @@ import { useSelector,useDispatch } from 'react-redux';
 import {useNavigate} from 'react-router';
 import { BsThreeDotsVertical} from 'react-icons/bs';
 import { TfiGallery} from 'react-icons/tfi';
-import { RiSendPlaneFill, RiDeleteBin2Fill} from 'react-icons/ri';
+import { RiSendPlaneFill} from 'react-icons/ri';
 import Sidebar from '../../component/Sidebar';
-import Userlist from '../../component/Userlist';
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { userLoginInfo } from '../../slices/userInfo/userSlice';
-import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
-import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL,uploadBytes  } from "firebase/storage";
+import { getDatabase, ref, onValue,set,push} from "firebase/database";
+import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 const Home = () => {
   const db = getDatabase()
   let [verify, setVerify] = useState(false)
@@ -22,15 +21,16 @@ const Home = () => {
   const storage = getStorage();
   const auth = getAuth()
   let data = useSelector((state)=>state.userLoginInfo.userInfo)
-  console.log("dataaa",data);
   onAuthStateChanged(auth, (user)=>{
     dispatch(userLoginInfo(user))
     localStorage.setItem("userInfo", JSON.stringify(user))
-    if(user.emailVerified){
-      setVerify(true)
-     }
   })
 
+  useEffect(()=>{
+    if(data.emailVerified){
+    setVerify(true)
+    }
+  },[]);
   useEffect(()=>{
      if(!data){
       navigate("/login")
@@ -143,7 +143,7 @@ useEffect(()=>{
                             <p className='font-medium font-poppins text-xs text-shadow'>{item.date}</p>
                         </div>
                       </div>
-                      <div className='my-3'>
+                      <div className='my-3 w-96'>
                           <img src={item.image}/>
                       </div>
                       </div>
@@ -174,7 +174,7 @@ useEffect(()=>{
                             </div>
                         </div>
                         <p className='font-regular font-poppins text-md my-3'>{item.text}</p>
-                        <div className=' w-96'>
+                        <div className='w-96'>
                             <img src={item.image}/>
                         </div>
                       </div>

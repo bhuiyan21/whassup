@@ -24,8 +24,6 @@ let initialState ={
 function reducer(state, action){
    switch(action.type){
         case action.type: return{ dotModal: state.dotModal = true, modalKey: action.type};
-        case action.type: return{ dotModal: state.dotModal = true, modalKey: action.type};
-        case action.type: return{dotModal: state.dotModal = true , modalKey: action.type};
    }
 }
 const Chatbox = () => {
@@ -429,7 +427,6 @@ const Chatbox = () => {
                    <Friend active="forword"/>
                </div>
             }
-                
         </div>
     </div>
   )

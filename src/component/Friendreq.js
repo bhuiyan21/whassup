@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BiDotsVerticalRounded} from 'react-icons/bi';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
-import { useDispatch, useSelector} from 'react-redux';
+import { useSelector} from 'react-redux';
 const Friendreq = () => {
     const db = getDatabase();
     let data = useSelector((state)=>state.userLoginInfo.userInfo)

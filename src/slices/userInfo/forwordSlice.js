@@ -12,6 +12,5 @@ export const forwordSlice = createSlice({
   },
 })
 
-// Action creators are generated for each case reducer function
 export const { forword } = forwordSlice.actions
 export default forwordSlice.reducer

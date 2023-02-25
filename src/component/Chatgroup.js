@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FcSearch} from 'react-icons/fc';
 import { useSelector, useDispatch } from 'react-redux';
-import { getDatabase, ref, onValue, set,push , remove} from "firebase/database";
+import { getDatabase, ref, onValue} from "firebase/database";
 import { activeChat } from '../slices/userInfo/activeChatSlice';
 const Chatgroup = () => {
     const dispatch = useDispatch()
@@ -44,7 +44,6 @@ const Chatgroup = () => {
       }         
     };
     let handelGmsg =(item)=>{
-        console.log("gmsg",item);
         dispatch(activeChat({status: "groupmsg", name: item.groupName, gid: item.key}))
         localStorage.setItem("activeSingle", JSON.stringify({status: "groupmsg", name: item.groupName, gid: item.key}))
     }

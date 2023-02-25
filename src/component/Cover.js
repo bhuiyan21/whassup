@@ -3,15 +3,13 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { AiFillCamera} from 'react-icons/ai';
 import { GiCrossMark} from 'react-icons/gi';
-import { getDatabase, ref as sref, onValue,set,push, remove} from "firebase/database";
+import { getDatabase, ref as sref, onValue,set} from "firebase/database";
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
-import { getAuth, signOut, updateProfile } from "firebase/auth";
-import { useDispatch, useSelector} from 'react-redux';
+import { useSelector} from 'react-redux';
 const Cover = () => {
   let data = useSelector((state)=>state.userLoginInfo.userInfo)
   const db = getDatabase()
     const storage = getStorage();
-    const auth = getAuth();
     const [coverUrl, setCoverUrl] = useState([]);
     const [covermodal, setCovermodal] = useState(false);
     const [coverpreview, setCoverpreview] = useState(false);
@@ -21,7 +19,6 @@ const Cover = () => {
     const [cropData, setCropData] = useState("#");
     const [cropper, setCropper] = useState();
     const [coverimg, setCoverimg] = useState('');
-    const [coverarr, setCoverarr] = useState([]);
     const handelCover = (e) => {
         setCoverMainmodal(!coverMainmodal)
         setCovermodal(!covermodal)
@@ -84,7 +81,6 @@ useEffect(()=>{
       setCoverUrl(arr)
   });
 },[])
-console.log("coverUrl",coverUrl);
   return (
     <div className='w-full h-56 bg-red-500 rounded-bl-md rounded-br-md'>
         {coverpreview

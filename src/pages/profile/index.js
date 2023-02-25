@@ -1,14 +1,13 @@
-import { data } from 'autoprefixer'
 import React, {useState } from 'react'
 import Sidebar from '../../component/Sidebar'
-import { useDispatch, useSelector} from 'react-redux';
+import { useSelector} from 'react-redux';
 import Cropper from "react-cropper";
 import { FaUserEdit} from 'react-icons/fa';
 import "cropperjs/dist/cropper.css";
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
-import { getDatabase, ref as sref, onValue, set,push} from "firebase/database";
-import { getAuth, signOut, updateProfile } from "firebase/auth";
-import { BiCrop, BiDotsVerticalRounded} from 'react-icons/bi';
+import { getDatabase, ref as sref, set} from "firebase/database";
+import { getAuth, updateProfile } from "firebase/auth";
+import { BiCrop} from 'react-icons/bi';
 import { AiFillCamera} from 'react-icons/ai';
 import Cover from '../../component/Cover';
 import Userprofile from '../../component/Userprofile';

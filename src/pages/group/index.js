@@ -5,7 +5,6 @@ import Mygroup from '../../component/Mygroup';
 import { MdOutlineGroupAdd,MdGroups} from 'react-icons/md';
 const Group = () => {
     let [grouplist, setGrouplist]= useState(false)
-    let [mygrouplist, setMygrouplist]= useState(false)
     let handelGrouplist=()=>{
         setGrouplist(true)
     }

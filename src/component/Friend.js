@@ -5,20 +5,14 @@ import { useDispatch, useSelector} from 'react-redux';
 import { activeChat } from '../slices/userInfo/activeChatSlice';
 
 const Friend = ({active}) => {
-  let [chat, setChat] = useState('')
-  const activeSingleData = useSelector(state=> state.activeChat.active)
     let data = useSelector((state)=>state.userLoginInfo.userInfo)
     let forwordItem = useSelector((state)=>state.forwordItem.forwordItem)
-    console.log("forwordItem",forwordItem);
     const db = getDatabase();
     const dispatch = useDispatch();
     let [accept, setAccept] = useState([])
     let [delateBox, setDelateBox] = useState(false);
     let [dltGroup, setDltGroup] = useState([]);
     let [filterUser, setFilterUser] = useState([])
-    useEffect(()=>{
-      setChat("active")
-    },[])
     useEffect(()=>{
         const acceptfrndRef = ref(db, 'friend');
         onValue(acceptfrndRef, (snapshot) => {
@@ -98,7 +92,6 @@ const Friend = ({active}) => {
       }
     }
     let handelSendMsg =(item)=>{
-        console.log("handelSendMsg",item);
         if(data.uid == item.receiverId){
           set(push(ref(db, 'singleChat')),{
             sendid: data.uid,

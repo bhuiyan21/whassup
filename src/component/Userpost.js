@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { TfiGallery} from 'react-icons/tfi';
 import { RiSendPlaneFill, RiDeleteBin2Fill} from 'react-icons/ri';
-import { BsThreeDotsVertical} from 'react-icons/bs';
-import { useDispatch, useSelector} from 'react-redux';
+import { useSelector} from 'react-redux';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
 import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL,uploadBytes  } from "firebase/storage";
 const Userpost = () => {

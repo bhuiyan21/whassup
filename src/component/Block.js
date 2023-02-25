@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FcSearch} from 'react-icons/fc';
 import { getDatabase, ref, onValue,set,push, remove} from "firebase/database";
-import { useDispatch, useSelector} from 'react-redux';
+import { useSelector} from 'react-redux';
 const Block = () => {
     let data = useSelector((state)=>state.userLoginInfo.userInfo);
     const db = getDatabase();

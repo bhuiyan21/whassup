@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
-import { FaUserPlus} from 'react-icons/fa';
-import { ImBlocked} from 'react-icons/im';
-import { RiUserHeartFill,RiUserReceived2Fill} from 'react-icons/ri';
-import { MdOutlineGroupAdd,MdGroups} from 'react-icons/md';
+import { RiUserHeartFill} from 'react-icons/ri';
+import { MdGroups} from 'react-icons/md';
 import Sidebar from '../../component/Sidebar'
 import Chatgroup from '../../component/Chatgroup';
 import Friend from '../../component/Friend'

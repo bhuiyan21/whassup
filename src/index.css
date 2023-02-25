@@ -17,9 +17,6 @@
     background: #e2e8f0 !important;
 }
 .EmojiPickerReact {
-    /* position: absolute !important;
-    top: 0;
-    left: 0; */
     width: 100% !important;
     height: 300px !important;
 }
@@ -29,10 +26,4 @@
 }
 .EmojiPickerReact .Flex {
     display: none !important;
-}
-.react-scroll-to-bottom--css-lplkk-1tj0vk3{
-    right: 50% !important;
-    background: #11175D !important;
-    clip-path: polygon(24% 0, 75% 0, 76% 44%, 100% 45%, 50% 100%, 2% 44%, 24% 44%);
-    -webkit-clip-path: polygon(24% 0, 75% 0, 76% 44%, 100% 45%, 50% 100%, 2% 44%, 24% 44%);
 }
