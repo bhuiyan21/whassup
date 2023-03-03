@@ -1,4 +1,4 @@
-import React, {useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import Sidebar from '../../component/Sidebar'
 import { useSelector} from 'react-redux';
 import Cropper from "react-cropper";
@@ -13,7 +13,9 @@ import Cover from '../../component/Cover';
 import Userprofile from '../../component/Userprofile';
 import Friend from '../../component/Friend';
 import Userpost from '../../component/Userpost';
+import {useNavigate} from 'react-router';
 const Profile = ({active}) => {
+  const navigate = useNavigate();
     const storage = getStorage();
     const auth = getAuth();
     const db = getDatabase();
@@ -94,6 +96,11 @@ const Profile = ({active}) => {
     setPost(true)
     setFriends(false)     
   }
+  useEffect(()=>{
+    if(!data){
+     navigate("/login")
+    }
+ },[]);
   return (
    <div className='bg-slate-200 pb-5'>
       <Sidebar/>

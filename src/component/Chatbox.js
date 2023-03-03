@@ -58,7 +58,7 @@ const Chatbox = () => {
                  img: inputPhotoUrl ? inputPhotoUrl:cameraPhotoUrl? cameraPhotoUrl:'',
                  audio: audioUrl,
                  receivid: activeSingleData.id,
-                 receivname: activeSingleData.name,
+                 receivname: activeSingleData && activeSingleData.name,
                  date: `${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`,
             });
         }else{
@@ -112,7 +112,7 @@ const Chatbox = () => {
             });
             setChatList(arr);
         });
-    },[activeSingleData.id])
+    },[activeSingleData])
       useEffect(()=>{
         const groupChatRef = ref(db, 'groupChat');
         onValue(groupChatRef, (snapshot) => {
@@ -122,7 +122,7 @@ const Chatbox = () => {
             });
             setGmsgList(arr);
         });
-    },[activeSingleData.id])
+    },[activeSingleData])
     const addAudioElement = (blob) => {
         const url = URL.createObjectURL(blob);
         const audioStorageRef = sref(storage, 'voice/' + url);
@@ -149,17 +149,17 @@ const Chatbox = () => {
                 {/* Recever profile start */}
                 <div className='flex p-2 border-b-2 bg-slate-100 mb-1 rounded-md'>
                     <div className='mr-4 w-[52px] h-[54px] rounded-full overflow-hidden'>
-                    <img className='w-full h-full' src={activeSingleData.profile}/>
+                    <img className='w-full h-full' src={activeSingleData && activeSingleData.profile}/>
                     </div>
                     <div>
-                        <h2 className='font-semibold font-poppins text-sm mt-2'>{activeSingleData.name}</h2>
-                        <p className='font-medium font-poppins text-xs text-shadow'>{activeSingleData.email}</p>
+                        <h2 className='font-semibold font-poppins text-sm mt-2'>{activeSingleData && activeSingleData.name}</h2>
+                        <p className='font-medium font-poppins text-xs text-shadow'>{activeSingleData && activeSingleData.email}</p>
                     </div>
                 </div>
                 {/* Recever profile end */}
                 <ScrollToBottom   className={emojiModal?'h-[260px] pr-6':'h-[560px] transition-all pr-6'}>
                     {/* Recever message start */}
-                    {
+                    { activeSingleData &&
                         activeSingleData.status == "singlemsg" 
                         ?
                         chatList.map(item=>(
@@ -243,6 +243,7 @@ const Chatbox = () => {
                        )) 
                        :gmsgList.map((item)=>(
                         data.uid == item.sendid ?
+                        activeSingleData &&
                         item.gid == activeSingleData.gid &&
                         <div>
                            {item.img
@@ -286,7 +287,8 @@ const Chatbox = () => {
                           </div>
                            }
                         </div>
-                        :item.gid == activeSingleData.gid &&
+                        : activeSingleData &&
+                        item.gid == activeSingleData.gid &&
                         <div>
                             {item.img
                         ?<div className='flex items-end gap-1'>

@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { RiUserHeartFill} from 'react-icons/ri';
 import { MdGroups} from 'react-icons/md';
-import Sidebar from '../../component/Sidebar'
+import Sidebar from '../../component/Sidebar';
 import Chatgroup from '../../component/Chatgroup';
-import Friend from '../../component/Friend'
+import Friend from '../../component/Friend';
 import Chatbox from '../../component/Chatbox';
+import {useNavigate} from 'react-router';
 const Message = () => {
+  const navigate = useNavigate();
+  let data = useSelector((state)=>state.userLoginInfo.userInfo)
   let [group, setGroup] = useState(false)
 
   let handelFriend =()=>{
@@ -14,6 +18,11 @@ const Message = () => {
   let handelGroup =()=>{
     setGroup(true)    
   };
+  useEffect(()=>{
+    if(!data){
+     navigate("/login")
+    }
+ },[]);
   return (
     <div>
        <div className='absolute top-0 left-0 w-full'>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Sidebar from '../../component/Sidebar';
 import { FaUserPlus} from 'react-icons/fa';
 import { ImBlocked} from 'react-icons/im';
@@ -7,7 +8,10 @@ import Friend from '../../component/Friend';
 import Friendreq from '../../component/Friendreq';
 import Userlist from '../../component/Userlist';
 import Block from '../../component/Block';
+import {useNavigate} from 'react-router';
 const Friends = () => {
+  let data = useSelector((state)=>state.userLoginInfo.userInfo)
+  const navigate = useNavigate();
   let [userlist, setUserlist]= useState(false)
   let [blocklist, setBlocklist]= useState(false)
   let [friendreq, setFriendreq]= useState(false)
@@ -31,6 +35,11 @@ const Friends = () => {
     setUserlist(false)
     setFriendreq(false)
    }
+   useEffect(()=>{
+    if(!data){
+     navigate("/login")
+    }
+ },[]);
   return (
     <div> 
         <div className='absolute top-0 left-0 w-full'>

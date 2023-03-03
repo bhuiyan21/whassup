@@ -27,10 +27,13 @@ const Home = () => {
   })
 
   useEffect(()=>{
-    if(data.emailVerified){
-    setVerify(true)
+    if(data){
+      if(data.emailVerified){
+      setVerify(true)
+      }      
     }
   },[]);
+
   useEffect(()=>{
      if(!data){
       navigate("/login")

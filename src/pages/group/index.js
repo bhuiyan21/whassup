@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Sidebar from '../../component/Sidebar';
 import Grouplist from '../../component/Grouplist';
 import Mygroup from '../../component/Mygroup';
 import { MdOutlineGroupAdd,MdGroups} from 'react-icons/md';
+import {useNavigate} from 'react-router';
 const Group = () => {
+    const navigate = useNavigate();
+    let data = useSelector((state)=>state.userLoginInfo.userInfo)
     let [grouplist, setGrouplist]= useState(false)
     let handelGrouplist=()=>{
         setGrouplist(true)
@@ -11,6 +15,11 @@ const Group = () => {
     let handelMygroup=()=>{
         setGrouplist(false)
     }
+    useEffect(()=>{
+        if(!data){
+         navigate("/login")
+        }
+     },[]);
   return (
     <div>
         <div className='absolute top-0 left-0 w-full'>
